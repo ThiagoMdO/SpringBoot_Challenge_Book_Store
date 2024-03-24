@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import java.io.Serial;
 
 @Getter
-public class ProductNotFoundException extends RuntimeException{
+public class ProductNotFoundException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -15,10 +15,10 @@ public class ProductNotFoundException extends RuntimeException{
 
     private final HttpStatus status;
 
-    public ProductNotFoundException(){
+    public ProductNotFoundException() {
         super(ErrorCode.NOT_FOUND.name());
         this.errorCode = ErrorCode.NOT_FOUND;
-        this.status =HttpStatus.NOT_FOUND;
+        this.status = HttpStatus.NOT_FOUND;
     }
 
 }

@@ -9,8 +9,10 @@ import java.util.List;
 public class ProductConstants {
 
     public static final Product PRODUCT = new Product("asdaf2", "Sapiens, Uma breve história da humanidade", "O planeta Terra tem cerca de 4,5 bilhões de anos.", 56.90);
+    public static final Product PRODUCT_VOID = new Product();
 
     public static final ProductDTO PRODUCT_DTO = new ProductDTO("asdaf2", "Sapiens, Uma breve história da humanidade", "O planeta Terra tem cerca de 4,5 bilhões de anos.", 56.90);
+    public static final ProductDTO PRODUCT_DTO_VOID = new ProductDTO();
 
 
     public static final Product SAPIENS_BOOK = new Product("asdaf2", "Sapiens, Uma breve história da humanidade", "O planeta Terra tem cerca de 4,5 bilhões de anos.", 56.90);
