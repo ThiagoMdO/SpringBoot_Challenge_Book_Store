@@ -1,10 +1,12 @@
 package com.thiagomdo.ba.challenge.msproducts.model.entities;
 
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serial;
@@ -22,10 +24,18 @@ public class Product implements Serializable {
     @Id
     private String id;
 
+    @NotEmpty
+    @NotBlank
+    @Indexed(unique = true)
     private String name;
 
+    @NotEmpty
+    @NotBlank
+    @Size(min = 10, message = "The field must have at least 10 characters")
     private String description;
 
+    @NotNull
+    @Min(0)
     private Double value;
 
     public void setName(String name) {

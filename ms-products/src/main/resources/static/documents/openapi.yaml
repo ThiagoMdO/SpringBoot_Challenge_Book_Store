@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: Product service api
+  description: |
+    - [Product api allows the user to manipulate product data, searching by id, returning all registered products, modifying, deleting or creating new products.]
+  version: 1.0
+
+servers:
+  - url: "http://localhost:8080"
+    description: Generated server url
+paths:
+  /products:
+    get:
+      summary: Retorna todos os produtos
+      description: Retorna uma lista de todos os produtos disponíveis.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDTO'
+  /products/{id}:
+    get:
+      summary: Retorna um produto pelo ID
+      description: Retorna um produto específico com base no ID fornecido.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID do produto a ser recuperado.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+components:
+  schemas:
+    ProductDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID do produto.
+        name:
+          type: string
+          description: Nome do produto.
+        description:
+          type: string
+          description: Descrição do produto.
+        price:
+          type: number
+          format: double
+          description: Preço do produto.

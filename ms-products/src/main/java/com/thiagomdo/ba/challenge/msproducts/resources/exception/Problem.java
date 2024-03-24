@@ -1,6 +1,7 @@
 package com.thiagomdo.ba.challenge.msproducts.resources.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.thiagomdo.ba.challenge.msproducts.services.exception.EmptyListException;
 import com.thiagomdo.ba.challenge.msproducts.services.exception.ProductNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,12 @@ public class Problem {
 
 
     public Problem(ErrorCode errorCode, ProductNotFoundException exception){
+        this.code =exception.getStatus().value();
+        this.status = errorCode.name();
+        this.message = errorCode.getMessage();
+    }
+
+    public Problem(ErrorCode errorCode, EmptyListException exception){
         this.code =exception.getStatus().value();
         this.status = errorCode.name();
         this.message = errorCode.getMessage();

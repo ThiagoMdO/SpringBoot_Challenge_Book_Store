@@ -13,7 +13,9 @@ public enum ErrorCode {
 
     CONFLICT("Conflict between the fields"),
 
-    SYSTEM_ERROR("Unavailable server");
+    SYSTEM_ERROR("Unavailable server"),
+
+    EMPTY_LIST("The list is empty");
 
     private final String message;
 }
