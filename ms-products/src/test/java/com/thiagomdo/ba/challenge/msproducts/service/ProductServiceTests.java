@@ -2,10 +2,10 @@ package com.thiagomdo.ba.challenge.msproducts.service;
 
 
 import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
+import com.thiagomdo.ba.challenge.msproducts.model.entities.Product;
 import com.thiagomdo.ba.challenge.msproducts.repository.ProductRepository;
 import com.thiagomdo.ba.challenge.msproducts.services.ProductService;
-import com.thiagomdo.ba.challenge.msproducts.services.exception.EmptyListException;
-import com.thiagomdo.ba.challenge.msproducts.services.exception.ProductNotFoundException;
+import com.thiagomdo.ba.challenge.msproducts.services.exception.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,6 +19,7 @@ import java.util.Optional;
 import static com.thiagomdo.ba.challenge.msproducts.common.ProductConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,4 +68,35 @@ public class ProductServiceTests {
 
         assertThrows(ProductNotFoundException.class, () -> productService.findById(unexistingId));
     }
+
+    @Test
+    void createProduct_With_ValidData_ReturnsProductDTO(){
+        when(productRepository.findByName(O_CORACAO_DO_MUNDO_BOOK_DTO.getName())).thenReturn(null);
+
+        when(productRepository.save(any(Product.class))).thenReturn(O_CORACAO_DO_MUNDO_BOOK);
+
+        ProductDTO result = productService.createProduct(O_CORACAO_DO_MUNDO_BOOK_DTO);
+
+        assertThat(result).isEqualTo(O_CORACAO_DO_MUNDO_BOOK_DTO);
+    }
+
+    @Test
+    void createProduct_With_NameAlreadyExist_ThrowsProductAlreadyExistException(){
+        when(productRepository.findByName(O_CORACAO_DO_MUNDO_BOOK_DTO.getName())).thenReturn(O_CORACAO_DO_MUNDO_BOOK);
+
+        assertThrows(ProductAlreadyExistException.class, () -> productService.createProduct(O_CORACAO_DO_MUNDO_BOOK_DTO));
+    }
+
+    @Test
+    void createProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException(){
+        assertThrows(MinDescriptionException.class, () -> productService.createProduct(PRODUCT_DESCRIPTION_LESS_TEEN_DTO));
+
+    }
+
+    @Test
+    void createProduct_With_ValueLessThanZero_ThrowsMinValueException(){
+        assertThrows(MinValueException.class, () -> productService.createProduct(PRODUCT_VALUE_LESS_ZERO_DTO));
+
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.thiagomdo.ba.challenge.msproducts.model.entities;
 
+import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -26,7 +27,6 @@ public class Product implements Serializable {
 
     @NotEmpty
     @NotBlank
-    @Indexed(unique = true)
     private String name;
 
     @NotEmpty
@@ -37,6 +37,12 @@ public class Product implements Serializable {
     @NotNull
     @Min(0)
     private Double value;
+
+    public Product(ProductDTO productDTO){
+        this.name = productDTO.getName();
+        this.description = productDTO.getDescription();
+        this.value = productDTO.getValue();
+    }
 
     public void setName(String name) {
         this.name = name;

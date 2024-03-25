@@ -11,7 +11,13 @@ public enum ErrorCode {
 
     BAD_REQUEST("Invalid data"),
 
+    MIM_SIZE_DESCRIPTION("The field must have at least 10 characters"),
+
+    MIM_VALUE_PERMITTED("It's not possible a negative value"),
+
     CONFLICT("Conflict between the fields"),
+
+    CONFLICT_NAME("The name is already in use"),
 
     SYSTEM_ERROR("Unavailable server"),
 

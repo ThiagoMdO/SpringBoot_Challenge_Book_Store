@@ -1,22 +1,23 @@
 package com.thiagomdo.ba.challenge.msproducts.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import com.thiagomdo.ba.challenge.msproducts.resources.ProductResource;
 import com.thiagomdo.ba.challenge.msproducts.services.ProductService;
-import com.thiagomdo.ba.challenge.msproducts.services.exception.EmptyListException;
-import com.thiagomdo.ba.challenge.msproducts.services.exception.ProductNotFoundException;
+import com.thiagomdo.ba.challenge.msproducts.services.exception.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.thiagomdo.ba.challenge.msproducts.common.ProductConstants.PRODUCT_DTO;
-import static com.thiagomdo.ba.challenge.msproducts.common.ProductConstants.PRODUCT_DTO_LIST;
+import static com.thiagomdo.ba.challenge.msproducts.common.ProductConstants.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductResource.class)
@@ -77,4 +78,37 @@ class ProductResourceTests {
 
         assertThrows(ProductNotFoundException.class, () -> productService.findById("1234sdd"));
     }
+
+    @Test
+    void createProduct_With_ValidData_ReturnsProductDTO() throws Exception{
+        when(productService.createProduct(PRODUCT_DTO)).thenReturn(PRODUCT_DTO);
+
+        mockMvc.perform(post("/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(PRODUCT_DTO)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void createProduct_With_NameAlreadyExist_ThrowsProductAlreadyExistException(){
+        when(productService.createProduct(PRODUCT_DTO)).thenThrow(ProductAlreadyExistException.class);
+
+        assertThrows(ProductAlreadyExistException.class, () -> productService.createProduct(PRODUCT_DTO));
+    }
+
+    @Test
+    void createProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException(){
+        when(productService.createProduct(PRODUCT_DESCRIPTION_LESS_TEEN_DTO)).thenThrow(MinDescriptionException.class);
+
+        assertThrows(MinDescriptionException.class, () -> productService.createProduct(PRODUCT_DESCRIPTION_LESS_TEEN_DTO));
+    }
+    @Test
+    void createProduct_With_ValueLessThanZero_ThrowsMinValueException(){
+        when(productService.createProduct(PRODUCT_VALUE_LESS_ZERO_DTO)).thenThrow(MinValueException.class);
+
+        assertThrows(MinValueException.class, () -> productService.createProduct(PRODUCT_VALUE_LESS_ZERO_DTO));
+    }
+
+
+
 }

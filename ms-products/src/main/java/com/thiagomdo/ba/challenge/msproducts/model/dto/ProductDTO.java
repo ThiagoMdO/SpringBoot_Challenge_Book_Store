@@ -1,10 +1,12 @@
 package com.thiagomdo.ba.challenge.msproducts.model.dto;
 
 import com.thiagomdo.ba.challenge.msproducts.model.entities.Product;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 @Getter
 @NoArgsConstructor

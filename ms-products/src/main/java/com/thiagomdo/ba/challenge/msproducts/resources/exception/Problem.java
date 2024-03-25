@@ -1,8 +1,7 @@
 package com.thiagomdo.ba.challenge.msproducts.resources.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.thiagomdo.ba.challenge.msproducts.services.exception.EmptyListException;
-import com.thiagomdo.ba.challenge.msproducts.services.exception.ProductNotFoundException;
+import com.thiagomdo.ba.challenge.msproducts.services.exception.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -28,6 +27,24 @@ public class Problem {
     }
 
     public Problem(ErrorCode errorCode, EmptyListException exception){
+        this.code =exception.getStatus().value();
+        this.status = errorCode.name();
+        this.message = errorCode.getMessage();
+    }
+
+    public Problem(ErrorCode errorCode, ProductAlreadyExistException exception){
+        this.code =exception.getStatus().value();
+        this.status = errorCode.name();
+        this.message = errorCode.getMessage();
+    }
+
+    public Problem(ErrorCode errorCode, MinDescriptionException exception){
+        this.code =exception.getStatus().value();
+        this.status = errorCode.name();
+        this.message = errorCode.getMessage();
+    }
+
+    public Problem(ErrorCode errorCode, MinValueException exception){
         this.code =exception.getStatus().value();
         this.status = errorCode.name();
         this.message = errorCode.getMessage();

@@ -2,13 +2,13 @@ package com.thiagomdo.ba.challenge.msproducts.resources;
 
 import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import com.thiagomdo.ba.challenge.msproducts.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -29,4 +29,15 @@ public class ProductResource {
         ProductDTO productDTO = productService.findById(id);
         return ResponseEntity.ok().body(productDTO);
     }
+
+    @PostMapping
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO){
+        ProductDTO pDTO = productService.createProduct(productDTO);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(pDTO.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(pDTO);
+    }
+
 }
