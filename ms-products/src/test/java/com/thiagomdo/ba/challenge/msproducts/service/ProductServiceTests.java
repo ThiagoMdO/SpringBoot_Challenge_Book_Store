@@ -99,4 +99,59 @@ public class ProductServiceTests {
 
     }
 
+    @Test
+    void updateProduct_With_ValidData_ReturnsProductDTO(){
+        when(productRepository.findById(ALERTA_VERMELHO_BOOK_DTO.getId())).thenReturn(Optional.of(ALERTA_VERMELHO_BOOK));
+
+        when(productRepository.save(any(Product.class))).thenReturn(ALERTA_VERMELHO_BOOK);
+
+        ProductDTO result = productService.updateProduct(ALERTA_VERMELHO_BOOK.getId(), ALERTA_VERMELHO_BOOK_DTO);
+
+        assertThat(result).isNotNull();
+
+        assertThat(result).isEqualTo(ALERTA_VERMELHO_BOOK_DTO);
+
+    }
+
+    @Test
+    void updateProduct_With_IdProductNotFound_ThrowsProductNotFoundException(){
+        when(productRepository.findById("IdNotValidProduct")).thenThrow(new ProductNotFoundException());
+
+        assertThrows(ProductNotFoundException.class, () -> productRepository.findById("IdNotValidProduct"));
+    }
+
+    @Test
+    void updateProduct_With_NameInUsingForAnotherProduct_ThrowsProductAlreadyExistException(){
+        when(productRepository.findById(ALERTA_VERMELHO_BOOK.getId())).thenReturn(Optional.of(ALERTA_VERMELHO_BOOK));
+
+        when(productRepository.findByName("Sapiens, Uma breve história da humanidade")).thenReturn(SAPIENS_BOOK);
+
+        assertThat(SAPIENS_BOOK.getName()).isNotNull();
+
+        assertThat(SAPIENS_BOOK.getName()).isNotEqualTo(ALERTA_VERMELHO_BOOK.getName());
+
+        assertThrows(ProductAlreadyExistException.class, () -> productService.updateProduct(ALERTA_VERMELHO_BOOK.getId(), SAPIENS_BOOK_DTO));
+    }
+
+    @Test
+    void updateProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException(){
+        when(productRepository.findById(SAPIENS_BOOK.getId())).thenReturn(Optional.of(SAPIENS_BOOK));
+
+        assertThrows(MinDescriptionException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_DESCRIPTION_LESS_TEEN_DTO));
+    }
+
+    @Test
+    void updateProduct_With_ValueIsNull_Throws_ThrowsMinValueException(){
+        when(productRepository.findById(SAPIENS_BOOK.getId())).thenReturn(Optional.of(SAPIENS_BOOK));
+
+        assertThrows(MinValueException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_VALUE_IS_NULL_DTO));
+    }
+
+    @Test
+    void updateProduct_With_ValueLessThanZero_ThrowsMinValueException(){
+        when(productRepository.findById(SAPIENS_BOOK.getId())).thenReturn(Optional.of(SAPIENS_BOOK));
+
+        assertThrows(MinValueException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_VALUE_LESS_ZERO_DTO));
+    }
+
 }

@@ -1,12 +1,11 @@
 package com.thiagomdo.ba.challenge.msproducts.model.dto;
 
 import com.thiagomdo.ba.challenge.msproducts.model.entities.Product;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.index.Indexed;
 
 @Getter
 @NoArgsConstructor
@@ -21,6 +20,22 @@ public class ProductDTO {
     private String description;
 
     private Double value;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
+    }
 
     public ProductDTO (Product product){
         this.id = product.getId();

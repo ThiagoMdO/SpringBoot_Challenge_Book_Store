@@ -2,10 +2,7 @@ package com.thiagomdo.ba.challenge.msproducts.model.entities;
 
 import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode
 @Document
 public class Product implements Serializable {
@@ -44,15 +42,4 @@ public class Product implements Serializable {
         this.value = productDTO.getValue();
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setValue(Double value) {
-        this.value = value;
-    }
 }

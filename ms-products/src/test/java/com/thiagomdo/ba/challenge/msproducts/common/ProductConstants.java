@@ -14,6 +14,7 @@ public class ProductConstants {
     public static final ProductDTO PRODUCT_DTO = new ProductDTO("asdaf2", "Sapiens, Uma breve história da humanidade", "O planeta Terra tem cerca de 4,5 bilhões de anos.", 56.90);
     public static final ProductDTO PRODUCT_DESCRIPTION_LESS_TEEN_DTO = new ProductDTO("asdaf2", "Sapiens, Uma breve história da humanidade", "curta", 56.90);
     public static final ProductDTO PRODUCT_VALUE_LESS_ZERO_DTO = new ProductDTO("asdaf2", "Sapiens, Uma breve história da humanidade", "O planeta Terra tem cerca de 4,5 bilhões de anos.", -56.90);
+    public static final ProductDTO PRODUCT_VALUE_IS_NULL_DTO = new ProductDTO("asdaf2", "Sapiens, Uma breve história da humanidade", "O planeta Terra tem cerca de 4,5 bilhões de anos.", null);
 
 
     public static final Product SAPIENS_BOOK = new Product("asdaf2", "Sapiens, Uma breve história da humanidade", "O planeta Terra tem cerca de 4,5 bilhões de anos.", 56.90);

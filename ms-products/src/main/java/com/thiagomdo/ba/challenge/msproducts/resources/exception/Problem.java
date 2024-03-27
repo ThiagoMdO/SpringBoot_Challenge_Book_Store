@@ -21,7 +21,7 @@ public class Problem {
 
 
     public Problem(ErrorCode errorCode, ProductNotFoundException exception){
-        this.code =exception.getStatus().value();
+        this.code = exception.getStatus().value();
         this.status = errorCode.name();
         this.message = errorCode.getMessage();
     }

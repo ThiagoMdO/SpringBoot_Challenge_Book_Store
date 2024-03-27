@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,4 +42,35 @@ public class ProductService {
 
         return new ProductDTO(result);
     }
+
+    public ProductDTO updateProduct(String id, ProductDTO dtoRequest){
+
+        ProductDTO testProductId = findById(id);
+
+        Product testProductExist = productRepository.findByName(dtoRequest.getName());
+
+        if (testProductExist != null && !Objects.equals(testProductId.getName(), testProductExist.getName())){
+            throw new ProductAlreadyExistException();
+        }
+
+        if (dtoRequest.getDescription().length() < 10) throw new MinDescriptionException();
+        if (dtoRequest.getValue() == null || dtoRequest.getValue() < 0) throw new MinValueException();
+
+        Product productInDB = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+
+        productInDB = ConvertDTORequestToRepository(productInDB, dtoRequest);
+
+        productRepository.save(productInDB);
+
+        return new ProductDTO(productInDB);
+    }
+
+    public static Product ConvertDTORequestToRepository(Product dtoRepository, ProductDTO dtoRequest){
+        dtoRepository.setName(dtoRequest.getName());
+        dtoRepository.setDescription(dtoRequest.getDescription());
+        dtoRepository.setValue(dtoRequest.getValue());
+        return dtoRepository;
+    }
+
 }
+
