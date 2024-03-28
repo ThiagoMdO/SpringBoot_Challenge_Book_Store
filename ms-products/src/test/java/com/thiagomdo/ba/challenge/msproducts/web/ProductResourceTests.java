@@ -1,7 +1,6 @@
 package com.thiagomdo.ba.challenge.msproducts.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import com.thiagomdo.ba.challenge.msproducts.resources.ProductResource;
 import com.thiagomdo.ba.challenge.msproducts.services.ProductService;
 import com.thiagomdo.ba.challenge.msproducts.services.exception.*;
@@ -9,14 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.thiagomdo.ba.challenge.msproducts.common.ProductConstants.*;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

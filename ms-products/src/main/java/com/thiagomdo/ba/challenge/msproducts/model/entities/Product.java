@@ -4,7 +4,6 @@ import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serial;
