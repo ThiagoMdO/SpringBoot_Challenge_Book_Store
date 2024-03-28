@@ -9,13 +9,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.thiagomdo.ba.challenge.msproducts.common.ProductConstants.*;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -151,6 +154,23 @@ class ProductResourceTests {
         when(productService.updateProduct("dasfx3", PRODUCT_VALUE_LESS_ZERO_DTO)).thenThrow(MinValueException.class);
 
         assertThrows(MinValueException.class, () -> productService.updateProduct("dasfx3", PRODUCT_VALUE_LESS_ZERO_DTO));
+    }
+
+    @Test
+    void deleteProductById_With_IdProductExistingInDB_ReturnsVoid_Status204() throws Exception{
+        String productId = "dasfx3";
+
+        doNothing().when(productService).deleteProduct(productId);
+
+        mockMvc.perform(delete("/products/{id}", productId))
+        .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteProductById_With_IdProductUnexistingInDB_ThrowsProductNotFoundException(){
+        doThrow(ProductNotFoundException.class).when(productService).deleteProduct("InvalidId");
+
+        assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct("InvalidId"));
     }
 
 }

@@ -20,6 +20,7 @@ import static com.thiagomdo.ba.challenge.msproducts.common.ProductConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -154,4 +155,21 @@ public class ProductServiceTests {
         assertThrows(MinValueException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_VALUE_LESS_ZERO_DTO));
     }
 
+    @Test
+    void deleteProduct_With_IdProductExistingInDB_ReturnsVoid(){
+        when(productRepository.findById("asdaf2")).thenReturn(Optional.of(PRODUCT));
+
+        productService.deleteProduct("asdaf2");
+
+        verify(productRepository).findById("asdaf2");
+
+        verify(productRepository).deleteById("asdaf2");
+    }
+
+    @Test
+    void deleteProduct_With_IdProductUnexistingInDB_ThrowsProductNotFoundException(){
+        when(productRepository.findById("IncorrectId")).thenThrow(ProductNotFoundException.class);
+
+        assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct("IncorrectId"));
+    }
 }

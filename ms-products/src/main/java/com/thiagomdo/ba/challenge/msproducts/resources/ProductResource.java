@@ -47,5 +47,12 @@ public class ProductResource {
         return ResponseEntity.ok().body(productDTO1);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProductById(@PathVariable String id){
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 }

@@ -72,5 +72,10 @@ public class ProductService {
         return dtoRepository;
     }
 
+    public void deleteProduct(String id){
+        findById(id);
+        productRepository.deleteById(id);
+    }
+
 }
 
