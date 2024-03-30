@@ -5,6 +5,7 @@ import com.thiagomdo.ba.challenge.msorders.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,5 +22,11 @@ public class OrderResource {
     public ResponseEntity<List<OrderDTO>> getAllOrders(){
         List<OrderDTO> list = orderService.getAll();
         return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable String id){
+        OrderDTO orderDTO = orderService.getById(id);
+        return ResponseEntity.ok().body(orderDTO);
     }
 }
