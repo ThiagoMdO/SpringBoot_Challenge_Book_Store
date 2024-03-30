@@ -50,7 +50,7 @@ class ProductResourceTests {
     }
 
     @Test
-    void findAllProducts_ReturnsNoProduct_Status200() throws Exception{
+    void findAllProducts_ReturnsNoProduct_ThrowsEmptyListException_Status200() throws Exception{
         when(productService.findAll()).thenThrow(new EmptyListException());
 
         mockMvc.perform(

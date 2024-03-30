@@ -36,19 +36,17 @@ public class Instantiation implements CommandLineRunner {
         ProductDTO p1 = new ProductDTO("6605903e1e2d5c55c2017277", 132L);
         ProductDTO p2 = new ProductDTO("6605903e1e2d5c55c2017278", 100L);
 
-        ProductDTO pDTO1 = productFeign.findProductById("6605cf4356de767ab57abb6f");
-        ProductDTO pDTO2 = productFeign.findProductById("6605cf4356de767ab57abb71");
-
-        pDTO1.setQuantity(10L);
-        pDTO2.setQuantity(20L);
+//        ProductDTO pDTO1 = productFeign.findProductById("6605cf4356de767ab57abb6f");
+//        ProductDTO pDTO2 = productFeign.findProductById("6605cf4356de767ab57abb71");
+//
+//        pDTO1.setQuantity(10L);
+//        pDTO2.setQuantity(20L);
 
         List<ProductDTO> listProducts1 = new ArrayList<>() {
             {
-                addAll(Arrays.asList(pDTO1, pDTO2));
+                addAll(Arrays.asList(p1, p2));
             }
         };
-
-
 
         AddressClientViaCepRequest newAddress = new AddressClientViaCepRequest();
         newAddress.setStreet("Street");
@@ -57,8 +55,6 @@ public class Instantiation implements CommandLineRunner {
 
         AddressByCep addressByCepFeign = viaCepFeign.searchLocationByCep("01001000");
 
-
-        System.out.println(addressByCepFeign);
 
         AddressClientViaCepResponse cepResponse = new AddressClientViaCepResponse(addressByCepFeign, newAddress.getNumber());
 
@@ -74,42 +70,47 @@ public class Instantiation implements CommandLineRunner {
         OrderResponse o1 = new OrderResponse(oR1, productValue, cepResponse);
         o1.setSubtotalValue(productValue);
         o1.setId("6605903e1e2d5c55c2017225");
-//        o1.getAddress().setCity("City");
-//        o1.getAddress().setState("State");
-//        o1.getAddress().setComplement("Complement");
 
         orderRepository.save(o1);
 
 
-        ProductDTO p3 = new ProductDTO("6605903e1e2d5c55c2017279", 12L);
-        ProductDTO p4 = new ProductDTO("6605903e1e2d5c55c2017280", 10L);
-        ProductDTO p5 = new ProductDTO("6605903e1e2d5c55c2017290", 10L);
+        ProductDTO p3 = new ProductDTO("6605903e1e2d5c55c2017219", 112L);
+        ProductDTO p4 = new ProductDTO("6605903e1e2d5c55c2017154", 60L);
+
+//        ProductDTO pDTO1 = productFeign.findProductById("6605cf4356de767ab57abb6f");
+//        ProductDTO pDTO2 = productFeign.findProductById("6605cf4356de767ab57abb71");
+//
+//        pDTO1.setQuantity(10L);
+//        pDTO2.setQuantity(20L);
 
         List<ProductDTO> listProducts2 = new ArrayList<>() {
             {
-                addAll(Arrays.asList(p3, p4, p5));
+                addAll(Arrays.asList(p3, p4));
             }
         };
 
         AddressClientViaCepRequest newAddress2 = new AddressClientViaCepRequest();
-        newAddress2.setStreet("Street2");
-        newAddress2.setNumber(156L);
-        newAddress2.setPostalCode("31333334");
+        newAddress2.setStreet("Street 2");
+        newAddress2.setNumber(120L);
+        newAddress2.setPostalCode("44610000");
+
+        AddressByCep addressByCepFeign2 = viaCepFeign.searchLocationByCep(newAddress2.getPostalCode());
+
+
+        AddressClientViaCepResponse cepResponse2 = new AddressClientViaCepResponse(addressByCepFeign2, newAddress2.getNumber());
+
 
         OrderRequest oR2 = new OrderRequest();
 
         oR2.setProducts(listProducts2);
         oR2.setAddress(newAddress2);
-        oR2.setPaymentMethod(Payment_method.PIX);
+        oR2.setPaymentMethod(Payment_method.BANK_TRANSFER);
 
-        Double productValue2 = 300.0;
+        Double productValue2 = 200.0;
 
-        OrderResponse o2 = new OrderResponse(oR2, productValue2, cepResponse);
-        o2.setSubtotalValue(productValue);
-        o2.setId("6605903e1e2d5c55c2017245");
-        o2.getAddress().setCity("City2");
-        o2.getAddress().setState("State2");
-        o2.getAddress().setComplement("Complement2");
+        OrderResponse o2 = new OrderResponse(oR2, productValue2, cepResponse2);
+        o2.setSubtotalValue(productValue2);
+        o2.setId("6605903e1e2d5c55c2017223");
 
         orderRepository.save(o2);
     }

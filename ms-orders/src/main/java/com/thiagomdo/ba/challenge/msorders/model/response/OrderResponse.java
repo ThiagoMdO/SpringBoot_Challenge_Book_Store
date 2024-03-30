@@ -4,10 +4,7 @@ import com.thiagomdo.ba.challenge.msorders.enuns.Payment_method;
 import com.thiagomdo.ba.challenge.msorders.enuns.Status;
 import com.thiagomdo.ba.challenge.msorders.model.dto.ProductDTO;
 import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequest;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
@@ -16,9 +13,10 @@ import java.util.List;
 
 @Getter
 @Setter
-//@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Document("orders")
+@EqualsAndHashCode
 public class OrderResponse {
 
     private String id;
@@ -39,7 +37,7 @@ public class OrderResponse {
 
     private Status status;
 
-    public OrderResponse(OrderRequest orderRequest, Double subtotalValue, AddressClientViaCepResponse cepResponse){
+    public OrderResponse(OrderRequest orderRequest, Double subtotalValue, AddressClientViaCepResponse cepResponse) {
         products = orderRequest.getProducts();
         address.setStreet(orderRequest.getAddress().getStreet());
         address.setNumber(orderRequest.getAddress().getNumber());
@@ -48,16 +46,19 @@ public class OrderResponse {
         address.setState(cepResponse.getState());
         address.setPostalCode(orderRequest.getAddress().getPostalCode());
 
-        if (orderRequest.getPaymentMethod().equals(Payment_method.PIX)){
+        paymentMethod = orderRequest.getPaymentMethod();
+        if (orderRequest.getPaymentMethod().equals(Payment_method.PIX)) {
             discount = 0.05 * subtotalValue;
             totalValue = subtotalValue - discount;
-        }else {
+        } else {
             discount = 0.0;
             totalValue = subtotalValue;
         }
 
+
         createdDate = LocalDate.now();
         status = Status.CONFIRMED;
     }
+
 
 }
