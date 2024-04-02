@@ -1,14 +1,17 @@
 package com.thiagomdo.ba.challenge.msorders.common;
 
+import com.thiagomdo.ba.challenge.msorders.client.models.AddressByCep;
 import com.thiagomdo.ba.challenge.msorders.enuns.Payment_method;
 import com.thiagomdo.ba.challenge.msorders.enuns.Status;
 import com.thiagomdo.ba.challenge.msorders.model.dto.OrderDTO;
 import com.thiagomdo.ba.challenge.msorders.model.dto.ProductDTO;
+import com.thiagomdo.ba.challenge.msorders.model.request.AddressClientViaCepRequest;
+import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequest;
+import com.thiagomdo.ba.challenge.msorders.model.request.ProductRequest;
 import com.thiagomdo.ba.challenge.msorders.model.response.AddressClientViaCepResponse;
 import com.thiagomdo.ba.challenge.msorders.model.response.OrderResponse;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,9 +20,11 @@ public class OrdersConstants {
     public static ProductDTO productDTO2 = new ProductDTO("6605903e1e2d5c55c2017226", 32L);
     public static ProductDTO productDTO3 = new ProductDTO("6605903e1e2d5c55c2017228", 12L);
     public static ProductDTO productDTO4 = new ProductDTO("6605903e1e2d5c55c2017221", 41L);
+    public static ProductDTO productDTO_WITH_ID_INVALID = new ProductDTO("InvalidIdProduct", 41L);
 
     public static List<ProductDTO> productDTOList = Arrays.asList(productDTO1, productDTO2);
     public static List<ProductDTO> productDTOList2 = Arrays.asList(productDTO3, productDTO4);
+    public static List<ProductDTO> productDTOList_WITH_ID_INVALID = Arrays.asList(productDTO_WITH_ID_INVALID, productDTO1);
 
 
     public static AddressClientViaCepResponse viaCepResponse = new AddressClientViaCepResponse(
@@ -37,6 +42,7 @@ public class OrdersConstants {
     "6605903e1e2d5c55c2017888", productDTOList2, viaCepResponse2, Payment_method.BANK_TRANSFER, 200.00, 0.00, 200.00, LocalDate.now(), Status.CONFIRMED
     );
 
+
     public static final OrderDTO ORDER_RESPONSE_DTO = new OrderDTO(ORDER_RESPONSE);
     public static final OrderDTO ORDER_RESPONSE2_DTO = new OrderDTO(ORDER_RESPONSE2);
 
@@ -46,5 +52,32 @@ public class OrdersConstants {
     public static final List<OrderDTO> ORDER_RESPONSE_LIST_DTO = Arrays.asList(ORDER_RESPONSE_DTO, ORDER_RESPONSE2_DTO);
 
 
+    // Management OrderRequest
+    public static ProductRequest PRODUCT_REQUEST1 = new ProductRequest("6605903e1e2d5c55c2017778", 100.00);
+    public static ProductDTO PRODUCT_DT01 = new ProductDTO("6605903e1e2d5c55c2017778", 10L);
+    public static ProductDTO PRODUCT_DT02 = new ProductDTO("6605903e1e2d5c55c2017779", 10L);
+
+    public static List<ProductDTO> productDTO_LIST = Arrays.asList(PRODUCT_DT01, PRODUCT_DT02);
+
+    public static AddressClientViaCepRequest VIA_CEP_REQUEST = new AddressClientViaCepRequest("Rua 1", 121L, "01001000");
+    public static AddressClientViaCepRequest VIA_CEP_REQUEST_FIELDS_INVALID = new AddressClientViaCepRequest(null, null, "01001000");
+    public static AddressClientViaCepRequest VIA_CEP_REQUEST_CEP_INVALID = new AddressClientViaCepRequest("Rua 1", 121L, "123");
+
+    public static AddressByCep ADDRESS_BY_CEP = new AddressByCep("Praça da Sé", "lado ímpar", "Sé", "São Paulo", "SP", "01001000");
+    public static AddressByCep ADDRESS_BY_CEP_INCORRECT_FIELDS = new AddressByCep("Praça da Sé", "lado ímpar", "Sé", "São Paulo", "SP", "01001000");
+
+    public static OrderRequest ORDER_REQUEST = new OrderRequest(productDTOList, VIA_CEP_REQUEST, Payment_method.PIX);
+    public static OrderRequest ORDER_REQUEST_WITH_ADDRESS_INVALID = new OrderRequest(productDTOList, VIA_CEP_REQUEST_FIELDS_INVALID, Payment_method.PIX);
+    public static OrderRequest ORDER_REQUEST_WITH_ID_PRODUCT_INVALID = new OrderRequest(productDTOList_WITH_ID_INVALID, VIA_CEP_REQUEST, Payment_method.PIX);
+    public static OrderRequest ORDER_REQUEST_WITH_CEP_INVALID = new OrderRequest(productDTOList, VIA_CEP_REQUEST_CEP_INVALID, Payment_method.PIX);
+    public static AddressClientViaCepResponse VIA_CEP_RESPONSE = new AddressClientViaCepResponse(ADDRESS_BY_CEP, ORDER_REQUEST.getAddress().getNumber());
+    public static AddressClientViaCepResponse VIA_CEP_RESPONSE_ADDRESS_INVALID = new AddressClientViaCepResponse(ADDRESS_BY_CEP_INCORRECT_FIELDS, ORDER_REQUEST_WITH_ADDRESS_INVALID.getAddress().getNumber());
+
+
+    public static final OrderResponse ORDER_RESPONSE_INVALID_ADDRESS = new OrderResponse(
+    "6605903e1e2d5c55c2017889", productDTOList, VIA_CEP_RESPONSE_ADDRESS_INVALID, Payment_method.BANK_TRANSFER, 200.00, 0.00, 200.00, LocalDate.now(), Status.CONFIRMED
+    );
+
+    public static final OrderDTO ORDER_RESPONSE_INVALID_ADDRESS_DTO = new OrderDTO(ORDER_RESPONSE_INVALID_ADDRESS);
 
 }

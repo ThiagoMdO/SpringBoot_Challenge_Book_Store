@@ -1,6 +1,7 @@
 package com.thiagomdo.ba.challenge.msproducts.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import com.thiagomdo.ba.challenge.msproducts.resources.ProductResource;
 import com.thiagomdo.ba.challenge.msproducts.services.ProductService;
 import com.thiagomdo.ba.challenge.msproducts.services.exception.*;
@@ -83,7 +84,7 @@ class ProductResourceTests {
 
         mockMvc.perform(post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(PRODUCT_DTO)))
+                .content(objectMapper.writeValueAsString(PRODUCT_DTO)))
                 .andExpect(status().isCreated());
     }
 

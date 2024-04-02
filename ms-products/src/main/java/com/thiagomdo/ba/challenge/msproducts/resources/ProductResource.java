@@ -2,7 +2,6 @@ package com.thiagomdo.ba.challenge.msproducts.resources;
 
 import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import com.thiagomdo.ba.challenge.msproducts.services.ProductService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

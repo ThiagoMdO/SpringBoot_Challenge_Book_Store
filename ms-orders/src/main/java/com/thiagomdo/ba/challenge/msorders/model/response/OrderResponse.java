@@ -55,6 +55,7 @@ public class OrderResponse {
             totalValue = subtotalValue;
         }
 
+        this.subtotalValue = subtotalValue;
 
         createdDate = LocalDate.now();
         status = Status.CONFIRMED;

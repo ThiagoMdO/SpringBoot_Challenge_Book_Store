@@ -33,8 +33,10 @@ public class Instantiation implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        ProductDTO p1 = new ProductDTO("6605903e1e2d5c55c2017277", 132L);
-        ProductDTO p2 = new ProductDTO("6605903e1e2d5c55c2017278", 100L);
+        orderRepository.deleteAll();
+
+        ProductDTO p1 = new ProductDTO("6605903e1e2d5c55c2017277", 10L);
+        ProductDTO p2 = new ProductDTO("6605903e1e2d5c55c2017278", 12L);
 
 //        ProductDTO pDTO1 = productFeign.findProductById("6605cf4356de767ab57abb6f");
 //        ProductDTO pDTO2 = productFeign.findProductById("6605cf4356de767ab57abb71");
@@ -42,11 +44,7 @@ public class Instantiation implements CommandLineRunner {
 //        pDTO1.setQuantity(10L);
 //        pDTO2.setQuantity(20L);
 
-        List<ProductDTO> listProducts1 = new ArrayList<>() {
-            {
-                addAll(Arrays.asList(p1, p2));
-            }
-        };
+        List<ProductDTO> listProducts1 = Arrays.asList(p1, p2);
 
         AddressClientViaCepRequest newAddress = new AddressClientViaCepRequest();
         newAddress.setStreet("Street");
@@ -83,11 +81,7 @@ public class Instantiation implements CommandLineRunner {
 //        pDTO1.setQuantity(10L);
 //        pDTO2.setQuantity(20L);
 
-        List<ProductDTO> listProducts2 = new ArrayList<>() {
-            {
-                addAll(Arrays.asList(p3, p4));
-            }
-        };
+        List<ProductDTO> listProducts2 = Arrays.asList(p3, p4);
 
         AddressClientViaCepRequest newAddress2 = new AddressClientViaCepRequest();
         newAddress2.setStreet("Street 2");

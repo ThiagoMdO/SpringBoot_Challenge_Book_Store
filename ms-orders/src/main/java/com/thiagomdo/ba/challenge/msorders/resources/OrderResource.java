@@ -1,14 +1,14 @@
 package com.thiagomdo.ba.challenge.msorders.resources;
 
 import com.thiagomdo.ba.challenge.msorders.model.dto.OrderDTO;
+import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequest;
 import com.thiagomdo.ba.challenge.msorders.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -28,5 +28,15 @@ public class OrderResource {
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable String id){
         OrderDTO orderDTO = orderService.getById(id);
         return ResponseEntity.ok().body(orderDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderRequest request){
+        OrderDTO orderDTO = orderService.create(request);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(orderDTO.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(orderDTO);
     }
 }

@@ -1,10 +1,12 @@
 package com.thiagomdo.ba.challenge.msorders.client.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class AddressByCep {
     private String logradouro;
 
@@ -18,15 +20,4 @@ public class AddressByCep {
 
     private String cep;
 
-    @Override
-    public String toString() {
-        return "AddressByCep{" +
-        "logradouro='" + logradouro + '\'' +
-        ", complemento='" + complemento + '\'' +
-        ", bairro='" + bairro + '\'' +
-        ", localidade='" + localidade + '\'' +
-        ", uf='" + uf + '\'' +
-        ", cep='" + cep + '\'' +
-        '}';
-    }
 }

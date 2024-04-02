@@ -12,6 +12,8 @@ public enum ErrorCode {
 
     SYSTEM_ERROR("Unavailable server"),
 
+    ADDRESS_INCORRECT("Format incorrect, check fields address"),
+
     EMPTY_LIST("The list is empty");
 
     private final String message;
