@@ -6,10 +6,7 @@ import com.thiagomdo.ba.challenge.msorders.client.models.AddressByCep;
 import com.thiagomdo.ba.challenge.msorders.enuns.Status;
 import com.thiagomdo.ba.challenge.msorders.model.dto.OrderDTO;
 import com.thiagomdo.ba.challenge.msorders.model.dto.ProductDTO;
-import com.thiagomdo.ba.challenge.msorders.model.request.AddressClientViaCepRequest;
-import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequest;
-import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestActualization;
-import com.thiagomdo.ba.challenge.msorders.model.request.ProductRequest;
+import com.thiagomdo.ba.challenge.msorders.model.request.*;
 import com.thiagomdo.ba.challenge.msorders.model.response.AddressClientViaCepResponse;
 import com.thiagomdo.ba.challenge.msorders.model.response.OrderResponse;
 import com.thiagomdo.ba.challenge.msorders.repository.OrderRepository;
@@ -54,6 +51,32 @@ public class OrderService {
         return new OrderDTO(orderResponse);
     }
 
+    public OrderDTO cancel(String id, OrderRequestCancel cancelReason) {
+        OrderResponse orderResponse = orderRepository.save(createOrderResponseToCanceled(id, cancelReason));
+
+        return new OrderDTO(orderResponse);
+    }
+
+    private OrderResponse createOrderResponseToCanceled(String id, OrderRequestCancel cancelReason) {
+        OrderResponse orderResponse = new OrderResponse(getById(id));
+
+        testStatus(orderResponse.getStatus());
+
+        testOrderGreaterThan90Days(orderResponse.getCreatedDate());
+
+        orderResponse.setCancelReason(cancelReason.getCancelReason());
+        orderResponse.setStatus(Status.CANCELED);
+        orderResponse.setCancelDate(LocalDate.now());
+
+        return orderResponse;
+    }
+
+    private void testStatus(Status status){
+        //Redundancia necessaria de checar se a ordem já foi cancelada para não atualizar novamente a dada de cancelamento
+        if (status.equals(Status.SENT) ||
+        status.equals(Status.CANCELED)) throw new NotPossibleToChangeStatusException();
+    }
+
     private OrderResponse createOrderResponse(OrderRequest request) {
         testStreetAndNumberAddress(request.getAddress().getStreet(), request.getAddress().getNumber());
         double total = countTotProducts(getListProducts(request.getProducts()), request);
@@ -63,16 +86,13 @@ public class OrderService {
 
     private OrderResponse createOrderResponseToUpdate(String id, OrderRequestActualization request) {
         testStreetAndNumberAddress(request.getAddress().getStreet(), request.getAddress().getNumber());
+        if (request.getStatus().equals(Status.CANCELED)) throw new NotPossibleToChangeStatusException();
+
         var orderResponse = new OrderResponse(getById(id));
 
         AddressClientViaCepResponse cepResponse = consultViaCepAddress(request.getAddress(), request.getAddress().getNumber());
 
-        testStatusDifferentStatusSENTAndOrderGreaterThan90Days(orderResponse);
-
-        if (request.getStatus().equals(Status.CANCELED)) {
-            orderResponse.setCancelReason(request.getCancelReason());
-            orderResponse.setCancelDate(LocalDate.now());
-        }
+        testStatus(orderResponse.getStatus());
 
         orderResponse.setStatus(request.getStatus());
         orderResponse.setAddress(cepResponse);
@@ -82,9 +102,9 @@ public class OrderService {
         return orderResponse;
     }
 
-    private void testStatusDifferentStatusSENTAndOrderGreaterThan90Days(OrderResponse orderResponse){
-        if (orderResponse.getStatus().equals(Status.SENT)) throw new NotPossibleToChangeStatusException();
-        if (orderResponse.getCreatedDate().plusDays(90).isBefore(LocalDate.now())) throw new NotPossibleToChangeDateException();
+    private void testOrderGreaterThan90Days(LocalDate dataCreated) {
+        if (dataCreated.plusDays(90).isBefore(LocalDate.now()))
+            throw new NotPossibleToChangeDateException();
     }
 
     private void testStreetAndNumberAddress(String street, Long number) {

@@ -1,15 +1,12 @@
 package com.thiagomdo.ba.challenge.msorders.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thiagomdo.ba.challenge.msorders.model.dto.OrderDTO;
 import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequest;
 import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestActualization;
+import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestCancel;
 import com.thiagomdo.ba.challenge.msorders.resources.OrderResource;
 import com.thiagomdo.ba.challenge.msorders.service.OrderService;
 import com.thiagomdo.ba.challenge.msorders.service.exception.*;
-import feign.FeignException;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -141,24 +138,6 @@ class OrderResourceTests {
             .content(objectMapper.writeValueAsString(ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS_INCORRECT))
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
-
-
-//        when(orderService.update(ORDER_RESPONSE_DTO.getId(), ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS_INCORRECT)).thenThrow(AddressIncorrectException.class);
-//
-//        mockMvc.perform(put("/orders/" + ORDER_RESPONSE_INVALID_ADDRESS.getId()))
-//        .andExpect(status().isBadRequest());
-
-////            .content(objectMapper.writeValueAsString(ORDER_RESPONSE_INVALID_ADDRESS))
-//            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isBadRequest());
-//
-//        when(orderService.getById("6605903e1e2d5c55c2017777")).thenReturn(ORDER_RESPONSE_DTO);
-//
-//        mockMvc.perform(get("/orders/6605903e1e2d5c55c2017777"))
-//        .andExpect(status().isOk())
-//        .andExpect(content().json(objectMapper.writeValueAsString(ORDER_RESPONSE_DTO)));
-
-
     }
 
     @Test
@@ -192,13 +171,38 @@ class OrderResourceTests {
     }
 
     @Test
-    void updateOrder_With_DateGreaterThen90Days_ThrowsNotPossibleToChangeDateException() throws Exception{
-        when(orderService.update(any(String.class), any(OrderRequestActualization.class))).thenThrow(NotPossibleToChangeDateException.class);
+    void canceledOrder_With_ValidData_ReturnsOrderDTO() throws Exception{
+        when(orderService.cancel(ORDER_RESPONSE_TO_CANCELED.getId(), new OrderRequestCancel("Cancel Reason"))).thenReturn(ORDER_RESPONSE_CANCELED_DTO);
 
-        mockMvc.perform(put("/orders/" + ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS.getId())
-            .content(objectMapper.writeValueAsString(ORDER_REQUEST_ACTUALIZATION))
+        mockMvc.perform(post("/orders/" + ORDER_RESPONSE_TO_CANCELED.getId())
+            .content(objectMapper.writeValueAsString(ORDER_RESPONSE_CANCELED))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void canceledOrder_With_OrderStatusAlreadySENTorCANCELED_ThrowsNotPossibleToChangeStatusException() throws Exception{
+        when(orderService.cancel(any(String.class), any(OrderRequestCancel.class))).thenThrow(NotPossibleToChangeStatusException.class);
+
+        mockMvc.perform(post("/orders/" + ORDER_RESPONSE_SENT.getId())
+            .content(objectMapper.writeValueAsString(ORDER_RESPONSE_SENT))
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
+
+        mockMvc.perform(post("/orders/" + ORDER_RESPONSE_CANCELED.getId())
+        .content(objectMapper.writeValueAsString(ORDER_RESPONSE_CANCELED))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void canceledOrder_With_DateGreaterThen90Days_ThrowsNotPossibleToChangeDateException() throws Exception{
+        when(orderService.cancel(any(String.class), any(OrderRequestCancel.class))).thenThrow(NotPossibleToChangeDateException.class);
+
+        mockMvc.perform(post("/orders/" + ORDER_RESPONSE_GREATER_THEN_90_DAYS.getId())
+        .content(objectMapper.writeValueAsString(ORDER_RESPONSE_GREATER_THEN_90_DAYS))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
     }
 
 

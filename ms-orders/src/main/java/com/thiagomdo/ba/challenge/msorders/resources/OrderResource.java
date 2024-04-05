@@ -3,6 +3,7 @@ package com.thiagomdo.ba.challenge.msorders.resources;
 import com.thiagomdo.ba.challenge.msorders.model.dto.OrderDTO;
 import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequest;
 import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestActualization;
+import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestCancel;
 import com.thiagomdo.ba.challenge.msorders.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,12 @@ public class OrderResource {
     public ResponseEntity<OrderDTO> updateOrder(@PathVariable String id, @RequestBody OrderRequestActualization actualization){
         OrderDTO orderDTO = orderService.update(id, actualization);
 
+        return ResponseEntity.ok().body(orderDTO);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<OrderDTO> canceledOrder(@PathVariable String id, @RequestBody OrderRequestCancel requestCancel){
+        OrderDTO orderDTO = orderService.cancel(id, requestCancel);
         return ResponseEntity.ok().body(orderDTO);
     }
 }

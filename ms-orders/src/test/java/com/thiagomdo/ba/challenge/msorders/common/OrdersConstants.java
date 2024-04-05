@@ -138,17 +138,41 @@ public class OrdersConstants {
 
 
     public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION = new OrderRequestActualization(
-    Status.CONFIRMED, VIA_CEP_REQUEST, "Cancel Reason");
+    Status.CONFIRMED, VIA_CEP_REQUEST);
     public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_STATUS_CANCELED = new OrderRequestActualization(
-    Status.CANCELED, VIA_CEP_REQUEST_44610000, "Cancel Reason");
+    Status.CANCELED, VIA_CEP_REQUEST);
     public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_STATUS_SENT = new OrderRequestActualization(
-    Status.SENT, VIA_CEP_REQUEST, "Cancel Reason");
+    Status.SENT, VIA_CEP_REQUEST);
     public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_WITH_CEP_INCORRECT = new OrderRequestActualization(
-    Status.CONFIRMED, VIA_CEP_REQUEST_CEP_INVALID, "Cancel Reason");
+    Status.CONFIRMED, VIA_CEP_REQUEST_CEP_INVALID);
     public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS_INCORRECT = new OrderRequestActualization(
-    Status.CONFIRMED, VIA_CEP_REQUEST_FIELDS_INVALID, "Cancel Reason");
+    Status.CONFIRMED, VIA_CEP_REQUEST_FIELDS_INVALID);
     public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS2_INCORRECT = new OrderRequestActualization(
-    Status.CONFIRMED, VIA_CEP_REQUEST_FIELDS2_INVALID, "Cancel Reason");
+    Status.CONFIRMED, VIA_CEP_REQUEST_FIELDS2_INVALID);
     public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS3_INCORRECT = new OrderRequestActualization(
-    Status.CONFIRMED, VIA_CEP_REQUEST_FIELDS3_INVALID, "Cancel Reason");
+    Status.CONFIRMED, VIA_CEP_REQUEST_FIELDS3_INVALID);
+
+
+    public static final OrderResponse ORDER_RESPONSE_TO_CANCELED = new OrderResponse(
+    "6605903e1e2d5c55c2017777", productDTOList, viaCepResponse, Payment_method.PIX, 100.00,
+    5.00, 95.00, LocalDate.now(), Status.CONFIRMED
+    );
+
+    public static final OrderResponse ORDER_RESPONSE_SENT = new OrderResponse(
+    "6605903e1e2d5c55c2017988", productDTOList, viaCepResponse, Payment_method.PIX, 100.00,
+    5.00, 95.00, LocalDate.now(), Status.SENT
+    );
+
+    public static final OrderResponse ORDER_RESPONSE_GREATER_THEN_90_DAYS = new OrderResponse(
+    "6605903e1e2d5c55c2017988", productDTOList, viaCepResponse, Payment_method.PIX, 100.00,
+    5.00, 95.00, LocalDate.now().minusDays(91), Status.CONFIRMED
+    );
+
+    public static final OrderResponse ORDER_RESPONSE_CANCELED = new OrderResponse(
+    "6605903e1e2d5c55c2017777", productDTOList, viaCepResponse, Payment_method.PIX, 100.00,
+    5.00, 95.00, LocalDate.now(), Status.CANCELED, "Cancel Reason", LocalDate.now()
+    );
+
+    public static final OrderDTO ORDER_RESPONSE_CANCELED_DTO = new OrderDTO(ORDER_RESPONSE_CANCELED);
+    public static final OrderDTO ORDER_RESPONSE_SENT_DTO = new OrderDTO(ORDER_RESPONSE_SENT);
 }

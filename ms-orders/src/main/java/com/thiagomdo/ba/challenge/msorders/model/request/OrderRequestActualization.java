@@ -12,5 +12,4 @@ public class OrderRequestActualization {
 
     private AddressClientViaCepRequest address;
 
-    private String cancelReason;
 }

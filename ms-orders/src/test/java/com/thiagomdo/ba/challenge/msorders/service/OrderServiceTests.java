@@ -2,8 +2,8 @@ package com.thiagomdo.ba.challenge.msorders.service;
 
 import com.thiagomdo.ba.challenge.msorders.client.ProductFeign;
 import com.thiagomdo.ba.challenge.msorders.client.ViaCepFeign;
-import com.thiagomdo.ba.challenge.msorders.enuns.Status;
 import com.thiagomdo.ba.challenge.msorders.model.dto.OrderDTO;
+import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestCancel;
 import com.thiagomdo.ba.challenge.msorders.model.response.OrderResponse;
 import com.thiagomdo.ba.challenge.msorders.repository.OrderRepository;
 import com.thiagomdo.ba.challenge.msorders.service.exception.*;
@@ -15,17 +15,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.management.DescriptorKey;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.thiagomdo.ba.challenge.msorders.common.OrdersConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -88,7 +84,7 @@ class OrderServiceTests {
 
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(new OrderDTO(ORDER_RESPONSE));
-        verify(orderRepository).save(any(OrderResponse.class));
+        verify(orderRepository, times(1)).save(any(OrderResponse.class));
     }
 
     @Test
@@ -131,22 +127,7 @@ class OrderServiceTests {
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(new OrderDTO(ORDER_RESPONSE));
 
-        verify(orderRepository).save(any(OrderResponse.class));
-    }
-
-    @Test
-    @DisplayName("Update: OrderResponse with CANCELED status should set cancelReason and cancelDate")
-    void update_With_CanceledStatus_ReturnsOrderDTO(){
-        when(orderRepository.findById(ORDER_RESPONSE_WITH_STATUS_CANCELED.getId())).thenReturn(Optional.of(ORDER_RESPONSE_WITH_STATUS_CANCELED));
-        when(viaCepFeign.searchLocationByCep(any(String.class))).thenReturn(ADDRESS_BY_CEP_44610000);
-        when(orderRepository.save(any(OrderResponse.class))).thenReturn(ORDER_RESPONSE_WITH_STATUS_CANCELED);
-
-        OrderDTO orderResponse = orderService.update(ORDER_RESPONSE_WITH_STATUS_CANCELED.getId(), ORDER_REQUEST_ACTUALIZATION_STATUS_CANCELED);
-
-        assertEquals(Status.CANCELED, orderResponse.getStatus());
-        assertEquals("Cancel Reason", orderResponse.getCancelReason());
-        assertEquals(LocalDate.now(), orderResponse.getCancelDate());
-        verify(orderRepository).save(any(OrderResponse.class));
+        verify(orderRepository, times(1)).save(any(OrderResponse.class));
     }
 
     @Test
@@ -160,15 +141,6 @@ class OrderServiceTests {
         verify(orderRepository, never()).findById(any(String.class));
         verify(viaCepFeign, never()).searchLocationByCep(any(String.class));
 
-//        //teste não unitário, apenas testar testStreetAndNumberAddress
-//        OrderService orderServiceMock = mock(OrderService.class);
-//
-//        doThrow(AddressIncorrectException.class)
-//        .when(orderServiceMock)
-//        .testStreetAndNumberAddress(ORDER_REQUEST_WITH_ADDRESS_INVALID.getAddress().getStreet(), ORDER_REQUEST_WITH_ADDRESS_INVALID.getAddress().getNumber());
-//
-//        assertThrows(AddressIncorrectException.class, () -> orderServiceMock.testStreetAndNumberAddress(null, null));
-//        verify(orderRepository, never()).save(any(OrderResponse.class));
     }
 
     @Test
@@ -189,46 +161,51 @@ class OrderServiceTests {
     }
 
     @Test
-    @DisplayName("Not possible to change Status if Order Status is SENT, throws NotPossibleToChangeStatusException")
-    void update_With_StatusSENT_ThrowsNotPossibleToChangeStatusException(){
-        when(orderRepository.findById(ORDER_RESPONSE_WITH_STATUS_SENT.getId())).thenReturn(Optional.of(ORDER_RESPONSE_WITH_STATUS_SENT));
+    @DisplayName("Not possible to change Status if Order Status is SENT or Canceled, throws NotPossibleToChangeStatusException")
+    void update_With_OrderStatusAlreadySENT_ThrowsNotPossibleToChangeStatusException(){
+        when(orderRepository.findById(ORDER_RESPONSE_SENT.getId())).thenReturn(Optional.of(ORDER_RESPONSE_SENT));
         when(viaCepFeign.searchLocationByCep(ORDER_REQUEST_ACTUALIZATION_STATUS_SENT.getAddress().getPostalCode())).thenReturn(ADDRESS_BY_CEP);
 
-        assertThrows(NotPossibleToChangeStatusException.class, () -> orderService.update(ORDER_RESPONSE_WITH_STATUS_SENT.getId(), ORDER_REQUEST_ACTUALIZATION_STATUS_SENT));
+        assertThrows(NotPossibleToChangeStatusException.class, () -> orderService.update(ORDER_RESPONSE_SENT.getId(), ORDER_REQUEST_ACTUALIZATION_STATUS_SENT));
         verify(orderRepository, never()).save(any(OrderResponse.class));
-
-//        OrderService orderServiceMock = mock(OrderService.class);
-//
-//        doThrow(NotPossibleToChangeStatusException.class)
-//        .when(orderServiceMock)
-//        .testStatusDifferentStatusSENTAndOrderGreaterThan90Days(ORDER_RESPONSE_WITH_STATUS_SENT);
-//
-//        assertThrows(NotPossibleToChangeStatusException.class, () -> orderServiceMock.testStatusDifferentStatusSENTAndOrderGreaterThan90Days(ORDER_RESPONSE_WITH_STATUS_SENT));
-//        verify(orderRepository, never()).save(any(OrderResponse.class));
     }
 
     @Test
-    @DisplayName("Update: Not possible to change Date if Date is Greater then 90 after que Created date order, throws NotPossibleToChangeDateException")
-    void update_With_DateGreaterThen90Days_ThrowsNotPossibleToChangeDateException(){
-        when(orderRepository.findById(ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS.getId())).thenReturn(Optional.of(ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS));
-        when(viaCepFeign.searchLocationByCep(any(String.class))).thenReturn(ADDRESS_BY_CEP2);
+    void update_With_OrderStatusAlreadyCANCELED_ThrowsNotPossibleToChangeStatusException() {
 
-
-        assertThrows(NotPossibleToChangeDateException.class, () -> orderService.update(ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS.getId(), ORDER_REQUEST_ACTUALIZATION));
+        assertThrows(NotPossibleToChangeStatusException.class, () -> orderService.update(ORDER_RESPONSE_CANCELED.getId(), ORDER_REQUEST_ACTUALIZATION_STATUS_CANCELED));
         verify(orderRepository, never()).save(any(OrderResponse.class));
-
-//        OrderService orderServiceMock = mock(OrderService.class);
-//
-//        doThrow(NotPossibleToChangeDateException.class)
-//        .when(orderServiceMock)
-//        .testStatusDifferentStatusSENTAndOrderGreaterThan90Days(ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS);
-//
-//        assertThrows(NotPossibleToChangeDateException.class, () -> orderServiceMock.testStatusDifferentStatusSENTAndOrderGreaterThan90Days(ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS));
-//        verify(orderRepository, never()).save(any(OrderResponse.class));
     }
 
+    @Test
+    void cancel_With_ValidData_ReturnsOrderDTO(){
+        when(orderRepository.save(ORDER_RESPONSE_CANCELED)).thenReturn(ORDER_RESPONSE_CANCELED);
+        when(orderRepository.findById(ORDER_RESPONSE_TO_CANCELED.getId())).thenReturn(Optional.of(ORDER_RESPONSE_TO_CANCELED));
 
+        OrderDTO result = orderService.cancel(ORDER_RESPONSE_CANCELED.getId(), new OrderRequestCancel("Cancel Reason"));
 
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(ORDER_RESPONSE_CANCELED_DTO);
+        verify(orderRepository, times(1)).save(ORDER_RESPONSE_CANCELED);
+    }
+
+    @Test
+    void cancel_With_OrderStatusAlreadySENTorCANCELED_ThrowsNotPossibleToChangeStatusException(){
+        when(orderRepository.findById(ORDER_RESPONSE_SENT.getId())).thenReturn(Optional.of(ORDER_RESPONSE_SENT));
+        when(orderRepository.findById(ORDER_RESPONSE_CANCELED.getId())).thenReturn(Optional.of(ORDER_RESPONSE_CANCELED));
+
+        assertThrows(NotPossibleToChangeStatusException.class, () -> orderService.cancel(ORDER_RESPONSE_SENT.getId(), new OrderRequestCancel("Cancel Reason")));
+        assertThrows(NotPossibleToChangeStatusException.class, () -> orderService.cancel(ORDER_RESPONSE_CANCELED.getId(), new OrderRequestCancel("Cancel Reason")));
+        verify(orderRepository, never()).save(any(OrderResponse.class));
+    }
+
+    @Test
+    void cancel_With_DateGreaterThen90Days_ThrowsNotPossibleToChangeDateException(){
+        when(orderRepository.findById(ORDER_RESPONSE_GREATER_THEN_90_DAYS.getId())).thenReturn(Optional.of(ORDER_RESPONSE_GREATER_THEN_90_DAYS));
+
+        assertThrows(NotPossibleToChangeDateException.class, () -> orderService.cancel(ORDER_RESPONSE_GREATER_THEN_90_DAYS.getId(), new OrderRequestCancel("Cancel Reason")));
+        verify(orderRepository, never()).save(any(OrderResponse.class));
+    }
 
 
 

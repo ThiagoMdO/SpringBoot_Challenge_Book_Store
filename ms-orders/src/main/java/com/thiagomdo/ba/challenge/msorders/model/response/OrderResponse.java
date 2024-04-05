@@ -96,7 +96,6 @@ public class OrderResponse {
     public OrderResponse (OrderRequestActualization actualization){
         status = actualization.getStatus();
         address = new AddressClientViaCepResponse(actualization.getAddress());
-        cancelReason = actualization.getCancelReason();
     }
 
 }
