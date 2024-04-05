@@ -45,15 +45,15 @@ public class ProductService {
 
     public ProductDTO updateProduct(String id, ProductDTO dtoRequest){
 
-        ProductDTO testProductId = findById(id);
+        ProductDTO testProductId = findById(id); //NOME = SAPIENS
 
-        Product testProductExist = productRepository.findByName(dtoRequest.getName());
+        Product testProductExist = productRepository.findByName(dtoRequest.getName()); // Alerta vermelho
+        if (dtoRequest.getDescription().length() < 10) throw new MinDescriptionException();
 
         if (testProductExist != null && !Objects.equals(testProductId.getName(), testProductExist.getName())){
             throw new ProductAlreadyExistException();
         }
 
-        if (dtoRequest.getDescription().length() < 10) throw new MinDescriptionException();
         if (dtoRequest.getValue() == null || dtoRequest.getValue() < 0) throw new MinValueException();
 
         Product productInDB = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);

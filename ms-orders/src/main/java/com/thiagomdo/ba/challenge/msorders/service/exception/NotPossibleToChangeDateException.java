@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatus;
 import java.io.Serial;
 
 @Getter
-public class AddressIncorrectException extends StandardCustomException {
+public class NotPossibleToChangeDateException extends StandardCustomException{
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -15,10 +16,9 @@ public class AddressIncorrectException extends StandardCustomException {
 
     private final HttpStatus status;
 
-    public AddressIncorrectException(){
-        super(ErrorCode.ADDRESS_INCORRECT.name());
-        this.errorCode = ErrorCode.ADDRESS_INCORRECT;
+    public NotPossibleToChangeDateException(){
+        super(ErrorCode.NOT_POSSIBLE_CHANGE_DATE.name());
+        this.errorCode = ErrorCode.NOT_POSSIBLE_CHANGE_DATE;
         this.status = HttpStatus.BAD_REQUEST;
     }
-
 }

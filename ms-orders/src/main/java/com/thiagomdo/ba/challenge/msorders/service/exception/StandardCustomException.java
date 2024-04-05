@@ -7,18 +7,17 @@ import org.springframework.http.HttpStatus;
 import java.io.Serial;
 
 @Getter
-public class EmptyListException extends StandardCustomException {
+public class StandardCustomException extends RuntimeException{
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final ErrorCode errorCode;
+    private ErrorCode errorCode;
 
-    private final HttpStatus status;
+    private HttpStatus status;
 
-    public EmptyListException(){
-        super(ErrorCode.EMPTY_LIST.name());
-        this.errorCode = ErrorCode.EMPTY_LIST;
-        this.status = HttpStatus.OK;
+    public StandardCustomException(String msg){
+        super(msg);
+        this.errorCode = ErrorCode.SYSTEM_ERROR;
+        this.status = HttpStatus.SERVICE_UNAVAILABLE;
     }
-
 }

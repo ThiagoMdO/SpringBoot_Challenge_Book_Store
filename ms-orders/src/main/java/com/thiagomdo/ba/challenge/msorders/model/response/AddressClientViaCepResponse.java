@@ -1,6 +1,7 @@
 package com.thiagomdo.ba.challenge.msorders.model.response;
 
 import com.thiagomdo.ba.challenge.msorders.client.models.AddressByCep;
+import com.thiagomdo.ba.challenge.msorders.model.request.AddressClientViaCepRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,12 @@ public class AddressClientViaCepResponse {
                 city = addressByCep.getLocalidade();
                 state = addressByCep.getUf();
                 postalCode = addressByCep.getCep();
+        }
+
+        public AddressClientViaCepResponse(AddressClientViaCepRequest viaCepRequest){
+                street = viaCepRequest.getStreet();
+                number = viaCepRequest.getNumber();
+                postalCode = viaCepRequest.getPostalCode();
         }
 
 }

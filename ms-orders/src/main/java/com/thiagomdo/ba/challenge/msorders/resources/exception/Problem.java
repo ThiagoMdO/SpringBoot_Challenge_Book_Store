@@ -1,6 +1,7 @@
 package com.thiagomdo.ba.challenge.msorders.resources.exception;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.thiagomdo.ba.challenge.msorders.service.exception.StandardCustomException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,12 @@ public class Problem {
 
     public Problem(ErrorCode errorCode, HttpStatus httpStatus){
         this.code = httpStatus.value();
+        this.status = errorCode.name();
+        this.message = errorCode.getMessage();
+    }
+
+    public <T extends StandardCustomException> Problem(ErrorCode errorCode, T exception){
+        this.code = exception.getStatus().value();
         this.status = errorCode.name();
         this.message = errorCode.getMessage();
     }

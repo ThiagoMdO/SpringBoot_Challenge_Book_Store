@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import java.io.Serial;
 
 @Getter
-public class AddressIncorrectException extends StandardCustomException {
+public class ProductNotFoundException extends StandardCustomException {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -15,10 +15,10 @@ public class AddressIncorrectException extends StandardCustomException {
 
     private final HttpStatus status;
 
-    public AddressIncorrectException(){
-        super(ErrorCode.ADDRESS_INCORRECT.name());
-        this.errorCode = ErrorCode.ADDRESS_INCORRECT;
-        this.status = HttpStatus.BAD_REQUEST;
+    public ProductNotFoundException() {
+        super(ErrorCode.PRODUCT_NOT_FOUND.name());
+        this.errorCode = ErrorCode.PRODUCT_NOT_FOUND;
+        this.status = HttpStatus.NOT_FOUND;
     }
 
 }

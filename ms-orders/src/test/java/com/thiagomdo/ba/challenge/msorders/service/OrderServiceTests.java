@@ -2,25 +2,28 @@ package com.thiagomdo.ba.challenge.msorders.service;
 
 import com.thiagomdo.ba.challenge.msorders.client.ProductFeign;
 import com.thiagomdo.ba.challenge.msorders.client.ViaCepFeign;
+import com.thiagomdo.ba.challenge.msorders.enuns.Status;
 import com.thiagomdo.ba.challenge.msorders.model.dto.OrderDTO;
 import com.thiagomdo.ba.challenge.msorders.model.response.OrderResponse;
 import com.thiagomdo.ba.challenge.msorders.repository.OrderRepository;
-import com.thiagomdo.ba.challenge.msorders.service.exception.AddressIncorrectException;
-import com.thiagomdo.ba.challenge.msorders.service.exception.EmptyListException;
-import com.thiagomdo.ba.challenge.msorders.service.exception.OrderNotFoundException;
+import com.thiagomdo.ba.challenge.msorders.service.exception.*;
 import feign.FeignException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.management.DescriptorKey;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.thiagomdo.ba.challenge.msorders.common.OrdersConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -81,50 +84,152 @@ class OrderServiceTests {
         when(viaCepFeign.searchLocationByCep(ORDER_REQUEST.getAddress().getPostalCode())).thenReturn(ADDRESS_BY_CEP);
         when(orderRepository.save(any(OrderResponse.class))).thenReturn(ORDER_RESPONSE);
 
-//        ProductRequest productRequest = productFeign.findProductById(ORDER_REQUEST.getProducts().get(0).getId());
-//        AddressByCep byCep = viaCepFeign.searchLocationByCep(ORDER_REQUEST.getAddress().getPostalCode());
-//        OrderResponse orderResponse = orderRepository.save(ORDER_RESPONSE);
-
         OrderDTO result = orderService.create(ORDER_REQUEST);
 
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(ORDER_RESPONSE.getId());
-
-//        assertThat(productRequest).isNotNull();
-//        assertThat(byCep).isNotNull();
-//        assertThat(orderResponse).isNotNull();
-//
-//        assertThat(productRequest).isEqualTo(PRODUCT_REQUEST1);
-//        assertThat(byCep).isEqualTo(ADDRESS_BY_CEP);
-//        assertThat(orderResponse).isEqualTo(ORDER_RESPONSE);
+        assertThat(result).isEqualTo(new OrderDTO(ORDER_RESPONSE));
+        verify(orderRepository).save(any(OrderResponse.class));
     }
 
     @Test
     void create_With_InvalidFieldsAddress_ThrowsAddressIncorrectException() {
-        OrderService orderService = mock(OrderService.class);
 
-        orderService.create(ORDER_REQUEST_WITH_ADDRESS_INVALID);
-
-        doThrow(AddressIncorrectException.class)
-        .when(orderService)
-        .testStreetAndNumberAddress(null, null);
-
-        assertThrows(AddressIncorrectException.class, () -> orderService.testStreetAndNumberAddress(null, null));
+        assertThrows(AddressIncorrectException.class, () -> orderService.create(ORDER_REQUEST_WITH_ADDRESS_INVALID));
+        assertThrows(AddressIncorrectException.class, () -> orderService.create(ORDER_REQUEST_WITH_ADDRESS2_INVALID));
+        assertThrows(AddressIncorrectException.class, () -> orderService.create(ORDER_REQUEST_WITH_ADDRESS3_INVALID));
+        verify(orderRepository, never()).save(any(OrderResponse.class));
+        verify(orderRepository, never()).findById(any(String.class));
+        verify(productFeign, never()).findProductById(any(String.class));
+        verify(viaCepFeign, never()).searchLocationByCep(any(String.class));
     }
 
     @Test
-    void create_With_InvalidIdProduct_ThrowsFeignException() {
+    void create_With_InvalidIdProduct_ProductNotFoundException() {
         when(productFeign.findProductById(ORDER_REQUEST_WITH_ID_PRODUCT_INVALID.getProducts().get(0).getId())).thenThrow(FeignException.class);
 
-        assertThrows(FeignException.class, () -> orderService.create(ORDER_REQUEST_WITH_ID_PRODUCT_INVALID));
+        assertThrows(ProductNotFoundException.class, () -> orderService.create(ORDER_REQUEST_WITH_ID_PRODUCT_INVALID));
+        verify(orderRepository, never()).save(any(OrderResponse.class));
     }
 
     @Test
-    void create_With_InvalidCEP_ThrowsFeignException() {
-        when(viaCepFeign.searchLocationByCep(ORDER_REQUEST_WITH_CEP_INVALID.getAddress().getPostalCode())).thenThrow(FeignException.class);
+    void create_With_InvalidCEP_AddressIncorrectException() {
+        when(viaCepFeign.searchLocationByCep(ORDER_REQUEST_WITH_CEP_INVALID.getAddress().getPostalCode())).thenThrow(AddressIncorrectException.class);
 
-        assertThrows(FeignException.class, () -> orderService.create(ORDER_REQUEST_WITH_CEP_INVALID));
+        assertThrows(AddressIncorrectException.class, () -> orderService.create(ORDER_REQUEST_WITH_CEP_INVALID));
+        verify(orderRepository, never()).save(any(OrderResponse.class));
     }
+
+
+    @Test
+    void update_With_ValidData_ReturnsOrderDTO(){
+        when(orderRepository.findById(ORDER_RESPONSE.getId())).thenReturn(Optional.of(ORDER_RESPONSE));
+        when(viaCepFeign.searchLocationByCep(ORDER_RESPONSE.getAddress().getPostalCode())).thenReturn(ADDRESS_BY_CEP);
+        when(orderRepository.save(any(OrderResponse.class))).thenReturn(ORDER_RESPONSE);
+
+        OrderDTO result = orderService.update(ORDER_RESPONSE_DTO.getId(), ORDER_REQUEST_ACTUALIZATION);
+
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(new OrderDTO(ORDER_RESPONSE));
+
+        verify(orderRepository).save(any(OrderResponse.class));
+    }
+
+    @Test
+    @DisplayName("Update: OrderResponse with CANCELED status should set cancelReason and cancelDate")
+    void update_With_CanceledStatus_ReturnsOrderDTO(){
+        when(orderRepository.findById(ORDER_RESPONSE_WITH_STATUS_CANCELED.getId())).thenReturn(Optional.of(ORDER_RESPONSE_WITH_STATUS_CANCELED));
+        when(viaCepFeign.searchLocationByCep(any(String.class))).thenReturn(ADDRESS_BY_CEP_44610000);
+        when(orderRepository.save(any(OrderResponse.class))).thenReturn(ORDER_RESPONSE_WITH_STATUS_CANCELED);
+
+        OrderDTO orderResponse = orderService.update(ORDER_RESPONSE_WITH_STATUS_CANCELED.getId(), ORDER_REQUEST_ACTUALIZATION_STATUS_CANCELED);
+
+        assertEquals(Status.CANCELED, orderResponse.getStatus());
+        assertEquals("Cancel Reason", orderResponse.getCancelReason());
+        assertEquals(LocalDate.now(), orderResponse.getCancelDate());
+        verify(orderRepository).save(any(OrderResponse.class));
+    }
+
+    @Test
+    void update_With_InvalidDataOrFormatAddress_ThrowsAddressIncorrectException(){
+
+        assertThrows(AddressIncorrectException.class, () -> orderService.update(ORDER_RESPONSE_DTO.getId(), ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS_INCORRECT));
+        assertThrows(AddressIncorrectException.class, () -> orderService.update(ORDER_RESPONSE_DTO.getId(), ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS2_INCORRECT));
+        assertThrows(AddressIncorrectException.class, () -> orderService.update(ORDER_RESPONSE_DTO.getId(), ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS3_INCORRECT));
+
+        verify(orderRepository, never()).save(any(OrderResponse.class));
+        verify(orderRepository, never()).findById(any(String.class));
+        verify(viaCepFeign, never()).searchLocationByCep(any(String.class));
+
+//        //teste não unitário, apenas testar testStreetAndNumberAddress
+//        OrderService orderServiceMock = mock(OrderService.class);
+//
+//        doThrow(AddressIncorrectException.class)
+//        .when(orderServiceMock)
+//        .testStreetAndNumberAddress(ORDER_REQUEST_WITH_ADDRESS_INVALID.getAddress().getStreet(), ORDER_REQUEST_WITH_ADDRESS_INVALID.getAddress().getNumber());
+//
+//        assertThrows(AddressIncorrectException.class, () -> orderServiceMock.testStreetAndNumberAddress(null, null));
+//        verify(orderRepository, never()).save(any(OrderResponse.class));
+    }
+
+    @Test
+    void update_With_OrderIdNotFound_ThrowsOrderNotFoundException(){
+        when(orderRepository.findById("InvalidId")).thenThrow(OrderNotFoundException.class);
+
+        assertThrows(OrderNotFoundException.class, () -> orderService.update("InvalidId", ORDER_REQUEST_ACTUALIZATION));
+        verify(orderRepository, never()).save(any(OrderResponse.class));
+    }
+
+    @Test
+    void update_With_InvalidCEP_ThrowsAddressIncorrectException(){
+        when(orderRepository.findById(ORDER_RESPONSE_DTO.getId())).thenReturn(Optional.of(ORDER_RESPONSE));
+        when(viaCepFeign.searchLocationByCep(ORDER_REQUEST_ACTUALIZATION_WITH_CEP_INCORRECT.getAddress().getPostalCode())).thenThrow(AddressIncorrectException.class);
+
+        assertThrows(AddressIncorrectException.class, () -> orderService.update(ORDER_RESPONSE.getId(), ORDER_REQUEST_ACTUALIZATION_WITH_CEP_INCORRECT));
+        verify(orderRepository, never()).save(any(OrderResponse.class));
+    }
+
+    @Test
+    @DisplayName("Not possible to change Status if Order Status is SENT, throws NotPossibleToChangeStatusException")
+    void update_With_StatusSENT_ThrowsNotPossibleToChangeStatusException(){
+        when(orderRepository.findById(ORDER_RESPONSE_WITH_STATUS_SENT.getId())).thenReturn(Optional.of(ORDER_RESPONSE_WITH_STATUS_SENT));
+        when(viaCepFeign.searchLocationByCep(ORDER_REQUEST_ACTUALIZATION_STATUS_SENT.getAddress().getPostalCode())).thenReturn(ADDRESS_BY_CEP);
+
+        assertThrows(NotPossibleToChangeStatusException.class, () -> orderService.update(ORDER_RESPONSE_WITH_STATUS_SENT.getId(), ORDER_REQUEST_ACTUALIZATION_STATUS_SENT));
+        verify(orderRepository, never()).save(any(OrderResponse.class));
+
+//        OrderService orderServiceMock = mock(OrderService.class);
+//
+//        doThrow(NotPossibleToChangeStatusException.class)
+//        .when(orderServiceMock)
+//        .testStatusDifferentStatusSENTAndOrderGreaterThan90Days(ORDER_RESPONSE_WITH_STATUS_SENT);
+//
+//        assertThrows(NotPossibleToChangeStatusException.class, () -> orderServiceMock.testStatusDifferentStatusSENTAndOrderGreaterThan90Days(ORDER_RESPONSE_WITH_STATUS_SENT));
+//        verify(orderRepository, never()).save(any(OrderResponse.class));
+    }
+
+    @Test
+    @DisplayName("Update: Not possible to change Date if Date is Greater then 90 after que Created date order, throws NotPossibleToChangeDateException")
+    void update_With_DateGreaterThen90Days_ThrowsNotPossibleToChangeDateException(){
+        when(orderRepository.findById(ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS.getId())).thenReturn(Optional.of(ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS));
+        when(viaCepFeign.searchLocationByCep(any(String.class))).thenReturn(ADDRESS_BY_CEP2);
+
+
+        assertThrows(NotPossibleToChangeDateException.class, () -> orderService.update(ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS.getId(), ORDER_REQUEST_ACTUALIZATION));
+        verify(orderRepository, never()).save(any(OrderResponse.class));
+
+//        OrderService orderServiceMock = mock(OrderService.class);
+//
+//        doThrow(NotPossibleToChangeDateException.class)
+//        .when(orderServiceMock)
+//        .testStatusDifferentStatusSENTAndOrderGreaterThan90Days(ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS);
+//
+//        assertThrows(NotPossibleToChangeDateException.class, () -> orderServiceMock.testStatusDifferentStatusSENTAndOrderGreaterThan90Days(ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS));
+//        verify(orderRepository, never()).save(any(OrderResponse.class));
+    }
+
+
+
+
 
 
 }

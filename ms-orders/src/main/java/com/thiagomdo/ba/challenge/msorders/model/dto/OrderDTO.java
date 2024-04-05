@@ -34,6 +34,10 @@ public class OrderDTO {
 
     private Status status;
 
+    private String cancelReason;
+
+    private LocalDate cancelDate;
+
     public OrderDTO(OrderResponse orderResponse){
         this.id = orderResponse.getId();
         this.products = orderResponse.getProducts();
@@ -44,5 +48,9 @@ public class OrderDTO {
         this.totalValue = orderResponse.getTotalValue();
         this.createdDate = orderResponse.getCreatedDate();
         this.status = orderResponse.getStatus();
+        if (orderResponse.getCancelDate() != null){
+            cancelDate = orderResponse.getCancelDate();
+            cancelReason = orderResponse.getCancelReason();
+        }
     }
 }

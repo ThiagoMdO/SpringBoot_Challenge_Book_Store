@@ -7,13 +7,13 @@ import org.springframework.http.HttpStatus;
 import java.io.Serial;
 
 @Getter
-public class OrderNotFoundException extends RuntimeException {
+public class OrderNotFoundException extends StandardCustomException {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private ErrorCode errorCode;
+    private final ErrorCode errorCode;
 
-    private HttpStatus status;
+    private final HttpStatus status;
 
     public OrderNotFoundException(){
         super(ErrorCode.NOT_FOUND.name());

@@ -7,6 +7,7 @@ import com.thiagomdo.ba.challenge.msorders.model.dto.OrderDTO;
 import com.thiagomdo.ba.challenge.msorders.model.dto.ProductDTO;
 import com.thiagomdo.ba.challenge.msorders.model.request.AddressClientViaCepRequest;
 import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequest;
+import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestActualization;
 import com.thiagomdo.ba.challenge.msorders.model.request.ProductRequest;
 import com.thiagomdo.ba.challenge.msorders.model.response.AddressClientViaCepResponse;
 import com.thiagomdo.ba.challenge.msorders.model.response.OrderResponse;
@@ -28,28 +29,59 @@ public class OrdersConstants {
 
 
     public static AddressClientViaCepResponse viaCepResponse = new AddressClientViaCepResponse(
-    "Praça da Sé", 100L, "lado ímpar", "São Paulo", "SP", "01001-000"
+    "Praça da Sé", 100L, "lado ímpar", "São Paulo", "SP", "01001000"
     );
 
     public static AddressClientViaCepResponse viaCepResponse2 = new AddressClientViaCepResponse(
-    "Rua Manoel", 230L, "", "Pintadas", "BA", "44610-000"
+    "Rua Manoel", 230L, "", "Pintadas", "BA", "44610000"
+    );
+    public static AddressClientViaCepResponse viaCepResponseInvalidFields = new AddressClientViaCepResponse(
+    null, null, "", "Pintadas", "BA", "44610000"
     );
 
     public static final OrderResponse ORDER_RESPONSE = new OrderResponse(
-    "6605903e1e2d5c55c2017777", productDTOList, viaCepResponse, Payment_method.PIX, 100.00, 5.00, 95.00, LocalDate.now(), Status.CONFIRMED
+    "6605903e1e2d5c55c2017777", productDTOList, viaCepResponse, Payment_method.PIX, 100.00,
+    5.00, 95.00, LocalDate.now(), Status.CONFIRMED
     );
     public static final OrderResponse ORDER_RESPONSE2 = new OrderResponse(
-    "6605903e1e2d5c55c2017888", productDTOList2, viaCepResponse2, Payment_method.BANK_TRANSFER, 200.00, 0.00, 200.00, LocalDate.now(), Status.CONFIRMED
+    "6605903e1e2d5c55c2017888", productDTOList2, viaCepResponse2, Payment_method.BANK_TRANSFER, 200.00,
+    0.00, 200.00, LocalDate.now(), Status.CONFIRMED
     );
+
+    public static final OrderResponse ORDER_RESPONSE_WITH_INVALID_ADDRESS = new OrderResponse(
+    "6605903e1e2d5c55c2017840", productDTOList2, viaCepResponseInvalidFields, Payment_method.BANK_TRANSFER, 200.00,
+    0.00, 200.00, LocalDate.now(), Status.CANCELED,"Cancel Reason" , LocalDate.now()
+    );
+
+    public static final OrderResponse ORDER_RESPONSE_WITH_ID_PRODUCT_INCORRECT = new OrderResponse(
+    "6605903e1e2d5c55c2017888", productDTOList_WITH_ID_INVALID, viaCepResponse2, Payment_method.BANK_TRANSFER, 200.00,
+    0.00, 200.00, LocalDate.now(), Status.CONFIRMED
+    );
+    public static final OrderResponse ORDER_RESPONSE_WITH_STATUS_SENT = new OrderResponse(
+    "6605903e1e2d5c55c2017888", productDTOList2, viaCepResponse2, Payment_method.BANK_TRANSFER, 200.00,
+    0.00,200.00, LocalDate.now(), Status.SENT
+    );
+    public static final OrderResponse ORDER_RESPONSE_WITH_DATE_GREATER_THEN_90_DAYS = new OrderResponse(
+    "6605903e1e2d5c55c2017888", productDTOList2, viaCepResponse2, Payment_method.BANK_TRANSFER, 200.00,
+    0.00,200.00, LocalDate.now().minusDays(91), Status.CONFIRMED
+    );
+    public static final OrderResponse ORDER_RESPONSE_WITH_STATUS_CANCELED = new OrderResponse(
+    "6605903e1e2d5c55c2017840", productDTOList2, viaCepResponse2, Payment_method.BANK_TRANSFER, 200.00,
+    0.00,200.00, LocalDate.now(), Status.CANCELED,"Cancel Reason" , LocalDate.now()
+    );
+
+
 
 
     public static final OrderDTO ORDER_RESPONSE_DTO = new OrderDTO(ORDER_RESPONSE);
     public static final OrderDTO ORDER_RESPONSE2_DTO = new OrderDTO(ORDER_RESPONSE2);
 
 
-    public static final List<OrderResponse> ORDER_RESPONSE_LIST = Arrays.asList(ORDER_RESPONSE, ORDER_RESPONSE2);
+    public static final List<OrderResponse> ORDER_RESPONSE_LIST = Arrays.asList(
+    ORDER_RESPONSE, ORDER_RESPONSE2);
 
-    public static final List<OrderDTO> ORDER_RESPONSE_LIST_DTO = Arrays.asList(ORDER_RESPONSE_DTO, ORDER_RESPONSE2_DTO);
+    public static final List<OrderDTO> ORDER_RESPONSE_LIST_DTO = Arrays.asList(
+    ORDER_RESPONSE_DTO, ORDER_RESPONSE2_DTO);
 
 
     // Management OrderRequest
@@ -59,19 +91,43 @@ public class OrdersConstants {
 
     public static List<ProductDTO> productDTO_LIST = Arrays.asList(PRODUCT_DT01, PRODUCT_DT02);
 
-    public static AddressClientViaCepRequest VIA_CEP_REQUEST = new AddressClientViaCepRequest("Rua 1", 121L, "01001000");
-    public static AddressClientViaCepRequest VIA_CEP_REQUEST_FIELDS_INVALID = new AddressClientViaCepRequest(null, null, "01001000");
-    public static AddressClientViaCepRequest VIA_CEP_REQUEST_CEP_INVALID = new AddressClientViaCepRequest("Rua 1", 121L, "123");
+    public static AddressClientViaCepRequest VIA_CEP_REQUEST = new AddressClientViaCepRequest(
+    "Rua 1", 121L, "01001000");
+    public static AddressClientViaCepRequest VIA_CEP_REQUEST_44610000 = new AddressClientViaCepRequest(
+    "Rua pintadas", 10L, "44610000");
+    public static AddressClientViaCepRequest VIA_CEP_REQUEST_FIELDS_INVALID = new AddressClientViaCepRequest(
+    null, null, "01001000");
+    public static AddressClientViaCepRequest VIA_CEP_REQUEST_FIELDS2_INVALID = new AddressClientViaCepRequest(
+    "", null, "01001000");
+    public static AddressClientViaCepRequest VIA_CEP_REQUEST_FIELDS3_INVALID = new AddressClientViaCepRequest(
+    " ", 15L, "01001000");
+    public static AddressClientViaCepRequest VIA_CEP_REQUEST_CEP_INVALID = new AddressClientViaCepRequest(
+    "Rua 1", 121L, "123");
 
-    public static AddressByCep ADDRESS_BY_CEP = new AddressByCep("Praça da Sé", "lado ímpar", "Sé", "São Paulo", "SP", "01001000");
-    public static AddressByCep ADDRESS_BY_CEP_INCORRECT_FIELDS = new AddressByCep("Praça da Sé", "lado ímpar", "Sé", "São Paulo", "SP", "01001000");
+    public static AddressByCep ADDRESS_BY_CEP = new AddressByCep("Praça da Sé", "lado ímpar",
+    "Sé", "São Paulo", "SP", "01001000");
+    public static AddressByCep ADDRESS_BY_CEP2 = new AddressByCep("Rua Manoel", "",
+    "", "Pintadas", "BA", "44610000");
+    public static AddressByCep ADDRESS_BY_CEP_44610000 = new AddressByCep("Rua principal", "lado ímpar",
+    "Centro", "Pintadas", "BA", "44610000");
+    public static AddressByCep ADDRESS_BY_CEP_INCORRECT_FIELDS = new AddressByCep("Praça da Sé", "lado ímpar",
+    "Sé", "São Paulo", "SP", "01001000");
 
     public static OrderRequest ORDER_REQUEST = new OrderRequest(productDTOList, VIA_CEP_REQUEST, Payment_method.PIX);
-    public static OrderRequest ORDER_REQUEST_WITH_ADDRESS_INVALID = new OrderRequest(productDTOList, VIA_CEP_REQUEST_FIELDS_INVALID, Payment_method.PIX);
-    public static OrderRequest ORDER_REQUEST_WITH_ID_PRODUCT_INVALID = new OrderRequest(productDTOList_WITH_ID_INVALID, VIA_CEP_REQUEST, Payment_method.PIX);
-    public static OrderRequest ORDER_REQUEST_WITH_CEP_INVALID = new OrderRequest(productDTOList, VIA_CEP_REQUEST_CEP_INVALID, Payment_method.PIX);
-    public static AddressClientViaCepResponse VIA_CEP_RESPONSE = new AddressClientViaCepResponse(ADDRESS_BY_CEP, ORDER_REQUEST.getAddress().getNumber());
-    public static AddressClientViaCepResponse VIA_CEP_RESPONSE_ADDRESS_INVALID = new AddressClientViaCepResponse(ADDRESS_BY_CEP_INCORRECT_FIELDS, ORDER_REQUEST_WITH_ADDRESS_INVALID.getAddress().getNumber());
+    public static OrderRequest ORDER_REQUEST_WITH_ADDRESS_INVALID = new OrderRequest(
+    productDTOList, VIA_CEP_REQUEST_FIELDS_INVALID, Payment_method.PIX);
+    public static OrderRequest ORDER_REQUEST_WITH_ADDRESS2_INVALID = new OrderRequest(
+    productDTOList, VIA_CEP_REQUEST_FIELDS2_INVALID, Payment_method.PIX);
+    public static OrderRequest ORDER_REQUEST_WITH_ADDRESS3_INVALID = new OrderRequest(
+    productDTOList, VIA_CEP_REQUEST_FIELDS3_INVALID, Payment_method.PIX);
+    public static OrderRequest ORDER_REQUEST_WITH_ID_PRODUCT_INVALID = new OrderRequest(
+    productDTOList_WITH_ID_INVALID, VIA_CEP_REQUEST, Payment_method.PIX);
+    public static OrderRequest ORDER_REQUEST_WITH_CEP_INVALID = new OrderRequest(
+    productDTOList, VIA_CEP_REQUEST_CEP_INVALID, Payment_method.PIX);
+    public static AddressClientViaCepResponse VIA_CEP_RESPONSE = new AddressClientViaCepResponse(
+    ADDRESS_BY_CEP, ORDER_REQUEST.getAddress().getNumber());
+    public static AddressClientViaCepResponse VIA_CEP_RESPONSE_ADDRESS_INVALID = new AddressClientViaCepResponse(
+    ADDRESS_BY_CEP_INCORRECT_FIELDS, ORDER_REQUEST_WITH_ADDRESS_INVALID.getAddress().getNumber());
 
 
     public static final OrderResponse ORDER_RESPONSE_INVALID_ADDRESS = new OrderResponse(
@@ -80,4 +136,19 @@ public class OrdersConstants {
 
     public static final OrderDTO ORDER_RESPONSE_INVALID_ADDRESS_DTO = new OrderDTO(ORDER_RESPONSE_INVALID_ADDRESS);
 
+
+    public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION = new OrderRequestActualization(
+    Status.CONFIRMED, VIA_CEP_REQUEST, "Cancel Reason");
+    public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_STATUS_CANCELED = new OrderRequestActualization(
+    Status.CANCELED, VIA_CEP_REQUEST_44610000, "Cancel Reason");
+    public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_STATUS_SENT = new OrderRequestActualization(
+    Status.SENT, VIA_CEP_REQUEST, "Cancel Reason");
+    public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_WITH_CEP_INCORRECT = new OrderRequestActualization(
+    Status.CONFIRMED, VIA_CEP_REQUEST_CEP_INVALID, "Cancel Reason");
+    public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS_INCORRECT = new OrderRequestActualization(
+    Status.CONFIRMED, VIA_CEP_REQUEST_FIELDS_INVALID, "Cancel Reason");
+    public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS2_INCORRECT = new OrderRequestActualization(
+    Status.CONFIRMED, VIA_CEP_REQUEST_FIELDS2_INVALID, "Cancel Reason");
+    public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION_WITH_FIELDS3_INCORRECT = new OrderRequestActualization(
+    Status.CONFIRMED, VIA_CEP_REQUEST_FIELDS3_INVALID, "Cancel Reason");
 }
