@@ -22,5 +22,4 @@ public class FeedBackNotFoundException extends StandardCustomException {
     }
 
 
-
 }

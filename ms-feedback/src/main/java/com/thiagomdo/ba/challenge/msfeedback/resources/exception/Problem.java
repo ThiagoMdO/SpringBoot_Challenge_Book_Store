@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import java.util.Map;
-import java.util.TreeMap;
 
 @Getter
 @AllArgsConstructor
@@ -39,5 +37,4 @@ public class Problem {
         this.status = errorCode.name();
         this.message = errorCode.getMessage();
     }
-
 }

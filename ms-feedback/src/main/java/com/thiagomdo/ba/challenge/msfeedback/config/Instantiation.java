@@ -1,6 +1,5 @@
 package com.thiagomdo.ba.challenge.msfeedback.config;
 
-import com.thiagomdo.ba.challenge.msfeedback.clients.OrderFeign;
 import com.thiagomdo.ba.challenge.msfeedback.enuns.Scale;
 import com.thiagomdo.ba.challenge.msfeedback.model.entities.FeedBack;
 import com.thiagomdo.ba.challenge.msfeedback.repository.FeedBackRepository;
