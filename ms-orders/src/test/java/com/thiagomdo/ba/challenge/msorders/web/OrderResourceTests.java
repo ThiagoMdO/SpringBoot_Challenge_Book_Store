@@ -64,9 +64,11 @@ class OrderResourceTests {
     }
 
     @Test
-    void getOrderById_ByUnexistingId_ThrowsOrderNotFoundException_Status404() {
+    void getOrderById_ByUnexistingId_ThrowsOrderNotFoundException_Status404() throws Exception{
         when(orderService.getById("InvalidIdOrders")).thenThrow(OrderNotFoundException.class);
 
+        mockMvc.perform(get("/orders/InvalidIdOrders"))
+            .andExpect(status().isNotFound());
         assertThrows(OrderNotFoundException.class, () -> orderService.getById("InvalidIdOrders"));
     }
 
