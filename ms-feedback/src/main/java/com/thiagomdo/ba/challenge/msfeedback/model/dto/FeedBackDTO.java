@@ -1,6 +1,7 @@
 package com.thiagomdo.ba.challenge.msfeedback.model.dto;
 
 import com.thiagomdo.ba.challenge.msfeedback.enuns.Scale;
+import com.thiagomdo.ba.challenge.msfeedback.model.entities.FeedBack;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
@@ -24,5 +25,12 @@ public class FeedBackDTO implements Serializable {
     private String comment;
 
     private String orderId;
+
+    public FeedBackDTO(FeedBack feedBack){
+        this.id = feedBack.getId();
+        this.scale = feedBack.getScale();
+        this.comment = feedBack.getComment();
+        this.orderId = feedBack.getOrderId();
+    }
 
 }
