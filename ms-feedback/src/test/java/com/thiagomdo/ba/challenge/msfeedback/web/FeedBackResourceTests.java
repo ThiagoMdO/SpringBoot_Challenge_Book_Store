@@ -1,21 +1,27 @@
 package com.thiagomdo.ba.challenge.msfeedback.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thiagomdo.ba.challenge.msfeedback.model.request.FeedBackRequest;
 import com.thiagomdo.ba.challenge.msfeedback.resources.FeedBackResource;
 import com.thiagomdo.ba.challenge.msfeedback.services.FeedBackService;
 import com.thiagomdo.ba.challenge.msfeedback.services.exception.EmptyListException;
 import com.thiagomdo.ba.challenge.msfeedback.services.exception.FeedBackNotFoundException;
+import com.thiagomdo.ba.challenge.msfeedback.services.exception.NotPossibleToCommentOrderException;
+import com.thiagomdo.ba.challenge.msfeedback.services.exception.OrderNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.thiagomdo.ba.challenge.msfeedback.common.FeedBackConstants.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FeedBackResource.class)
@@ -68,4 +74,34 @@ public class FeedBackResourceTests {
             .andExpect(status().isNotFound());
     }
 
+    @Test
+    void createFeedBack_With_ValidData_ReturnsFeedBackDTO_Status200() throws Exception{
+        when(feedBackService.create(FEED_BACK_REQUEST01)).thenReturn(FEED_BACK_CREATED_IN_DB_DTO);
+
+        mockMvc.perform(post("/feedbacks")
+        .content(objectMapper.writeValueAsString(FEED_BACK_REQUEST01))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated());
+    }
+
+    @Test
+    void createFeedBack_With_OrderIdInvalid_ThrowsOrderNotFoundException_Status404() throws Exception{
+        when(feedBackService.create(FEED_BACK_REQUEST0_OrderIdInvalid)).thenThrow(OrderNotFoundException.class);
+
+        mockMvc.perform(post("/feedbacks")
+        .content(objectMapper.writeValueAsString(FEED_BACK_REQUEST0_OrderIdInvalid))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    void createFeedBack_With_OrderAlreadyCANCELED_ThrowsNotPossibleToCommentOrderException() throws Exception{
+        when(feedBackService.create(FEED_BACK_REQUEST02_ORDER_CANCELED)).thenThrow(NotPossibleToCommentOrderException.class);
+
+        mockMvc.perform(post("/feedbacks")
+        .content(objectMapper.writeValueAsString(FEED_BACK_REQUEST02_ORDER_CANCELED))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+    }
 }

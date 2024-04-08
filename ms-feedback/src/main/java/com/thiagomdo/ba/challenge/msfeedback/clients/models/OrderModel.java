@@ -9,4 +9,6 @@ import lombok.*;
 @EqualsAndHashCode
 public class OrderModel {
     private String id;
+
+    private String status;
 }

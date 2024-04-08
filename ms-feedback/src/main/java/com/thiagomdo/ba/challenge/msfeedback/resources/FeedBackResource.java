@@ -1,14 +1,14 @@
 package com.thiagomdo.ba.challenge.msfeedback.resources;
 
 import com.thiagomdo.ba.challenge.msfeedback.model.dto.FeedBackDTO;
+import com.thiagomdo.ba.challenge.msfeedback.model.request.FeedBackRequest;
 import com.thiagomdo.ba.challenge.msfeedback.services.FeedBackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -28,6 +28,16 @@ public class FeedBackResource {
     public ResponseEntity<FeedBackDTO> getFeedBackById(@PathVariable String id){
         FeedBackDTO feedBackDTO = feedBackService.getById(id);
         return ResponseEntity.ok().body(feedBackDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<FeedBackDTO> createFeedBack(@RequestBody FeedBackRequest request){
+        FeedBackDTO feedBackDTO = feedBackService.create(request);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        .buildAndExpand(feedBackDTO.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(feedBackDTO);
     }
 
 }
