@@ -1,7 +1,7 @@
 package com.thiagomdo.ba.challenge.msfeedback.resources.exception;
 
 import com.thiagomdo.ba.challenge.msfeedback.services.exception.EmptyListException;
-import com.thiagomdo.ba.challenge.msfeedback.services.exception.FeedBackNotFoundException;
+import com.thiagomdo.ba.challenge.msfeedback.services.exception.FeedbackNotFoundException;
 import com.thiagomdo.ba.challenge.msfeedback.services.exception.NotPossibleToCommentOrderException;
 import com.thiagomdo.ba.challenge.msfeedback.services.exception.OrderNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class HandlerException {
 
-    @ExceptionHandler(FeedBackNotFoundException.class)
+    @ExceptionHandler(FeedbackNotFoundException.class)
     public ResponseEntity<Object> handlerFeedBackNotFoundException(){
         var problem = new Problem(ErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);

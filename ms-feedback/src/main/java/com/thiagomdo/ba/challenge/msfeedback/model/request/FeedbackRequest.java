@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
-public class FeedBackRequest {
+public class FeedbackRequest {
 
     private Scale scale;
 

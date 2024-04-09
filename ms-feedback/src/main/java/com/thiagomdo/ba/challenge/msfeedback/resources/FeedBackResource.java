@@ -1,8 +1,8 @@
 package com.thiagomdo.ba.challenge.msfeedback.resources;
 
-import com.thiagomdo.ba.challenge.msfeedback.model.dto.FeedBackDTO;
-import com.thiagomdo.ba.challenge.msfeedback.model.request.FeedBackRequest;
-import com.thiagomdo.ba.challenge.msfeedback.services.FeedBackService;
+import com.thiagomdo.ba.challenge.msfeedback.model.dto.FeedbackDTO;
+import com.thiagomdo.ba.challenge.msfeedback.model.request.FeedbackRequest;
+import com.thiagomdo.ba.challenge.msfeedback.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,23 +16,23 @@ import java.util.List;
 public class FeedBackResource {
 
     @Autowired
-    FeedBackService feedBackService;
+    FeedbackService feedBackService;
 
     @GetMapping
-    public ResponseEntity<List<FeedBackDTO>> getAllFeedBack() {
-        List<FeedBackDTO> listFeedBack = feedBackService.getAll();
+    public ResponseEntity<List<FeedbackDTO>> getAllFeedBack() {
+        List<FeedbackDTO> listFeedBack = feedBackService.getAll();
         return ResponseEntity.ok().body(listFeedBack);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FeedBackDTO> getFeedBackById(@PathVariable String id) {
-        FeedBackDTO feedBackDTO = feedBackService.getById(id);
+    public ResponseEntity<FeedbackDTO> getFeedBackById(@PathVariable String id) {
+        FeedbackDTO feedBackDTO = feedBackService.getById(id);
         return ResponseEntity.ok().body(feedBackDTO);
     }
 
     @PostMapping
-    public ResponseEntity<FeedBackDTO> createFeedBack(@RequestBody FeedBackRequest request) {
-        FeedBackDTO feedBackDTO = feedBackService.create(request);
+    public ResponseEntity<FeedbackDTO> createFeedBack(@RequestBody FeedbackRequest request) {
+        FeedbackDTO feedBackDTO = feedBackService.create(request);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
         .buildAndExpand(feedBackDTO.getId()).toUri();
@@ -41,9 +41,15 @@ public class FeedBackResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FeedBackDTO> updateFeedBack(@PathVariable String id, @RequestBody FeedBackRequest request) {
-        FeedBackDTO feedBackDTO = feedBackService.update(id, request);
+    public ResponseEntity<FeedbackDTO> updateFeedBack(@PathVariable String id, @RequestBody FeedbackRequest request) {
+        FeedbackDTO feedBackDTO = feedBackService.update(id, request);
 
         return ResponseEntity.ok().body(feedBackDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFeedBack(@PathVariable String id){
+        feedBackService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

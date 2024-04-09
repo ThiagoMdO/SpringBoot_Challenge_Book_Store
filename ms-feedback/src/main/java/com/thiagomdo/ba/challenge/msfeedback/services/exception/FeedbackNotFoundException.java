@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import java.io.Serial;
 
 @Getter
-public class FeedBackNotFoundException extends StandardCustomException {
+public class FeedbackNotFoundException extends StandardCustomException {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -15,7 +15,7 @@ public class FeedBackNotFoundException extends StandardCustomException {
 
     private final HttpStatus status;
 
-    public FeedBackNotFoundException(){
+    public FeedbackNotFoundException(){
         super(ErrorCode.NOT_FOUND.name());
         this.errorCode = ErrorCode.NOT_FOUND;
         this.status = HttpStatus.NOT_FOUND;

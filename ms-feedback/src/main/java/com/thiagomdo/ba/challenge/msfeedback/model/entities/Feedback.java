@@ -1,8 +1,8 @@
 package com.thiagomdo.ba.challenge.msfeedback.model.entities;
 
 import com.thiagomdo.ba.challenge.msfeedback.enuns.Scale;
-import com.thiagomdo.ba.challenge.msfeedback.model.dto.FeedBackDTO;
-import com.thiagomdo.ba.challenge.msfeedback.model.request.FeedBackRequest;
+import com.thiagomdo.ba.challenge.msfeedback.model.dto.FeedbackDTO;
+import com.thiagomdo.ba.challenge.msfeedback.model.request.FeedbackRequest;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Getter
 @EqualsAndHashCode
 @Document("feedback")
-public class FeedBack implements Serializable {
+public class Feedback implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -29,20 +29,20 @@ public class FeedBack implements Serializable {
 
     private String orderId;
 
-    public FeedBack(FeedBackDTO feedBackDTO){
+    public Feedback(FeedbackDTO feedBackDTO){
         id = feedBackDTO.getId();
         scale = feedBackDTO.getScale();
         comment = feedBackDTO.getComment();
         orderId = feedBackDTO.getOrderId();
     }
 
-    public FeedBack(FeedBackRequest request, String idOrder){
+    public Feedback(FeedbackRequest request, String idOrder){
         scale = request.getScale();
         comment = request.getComment();
         orderId = idOrder;
     }
 
-    public FeedBack(String idInBD, FeedBack feedBackCreated){
+    public Feedback(String idInBD, Feedback feedBackCreated){
         id = idInBD;
         scale = feedBackCreated.getScale();
         comment = feedBackCreated.getComment();
