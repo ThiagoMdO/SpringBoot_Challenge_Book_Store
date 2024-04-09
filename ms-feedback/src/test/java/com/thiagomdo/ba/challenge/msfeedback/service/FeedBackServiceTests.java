@@ -101,5 +101,49 @@ public class FeedBackServiceTests {
         verify(feedBackRepository, never()).save(any());
     }
 
+    @Test
+    void update_With_ValidData_ReturnsFeedBackDTO(){
+        when(feedBackRepository.findById(FEED_BACK_CREATED_IN_DB_DTO.getId())).thenReturn(Optional.of(FEED_BACK_CREATED_IN_DB));
+        when(orderFeign.getOrderById(FEED_BACK_REQUEST02_ORDER_TO_UPDATE.getOrderId())).thenReturn(ORDER_MODEL01_CONFIRMED);
+        when(feedBackRepository.save(FEED_BACK_UPDATED_IN_DB)).thenReturn(FEED_BACK_UPDATED_IN_DB);
+
+        FeedBackDTO result = feedBackService.update(FEED_BACK_CREATED_IN_DB_DTO.getId(), FEED_BACK_REQUEST02_ORDER_TO_UPDATE);
+
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(FEED_BACK_UPDATED_IN_DB_DTO);
+        verify(feedBackRepository, times(1)).save(FEED_BACK_UPDATED_IN_DB);
+    }
+
+    @Test
+    void update_With_InvalidIdValid_ThrowsFeedBackNotFoundException(){
+        when(feedBackRepository.findById("Id_Invalid")).thenThrow(FeedBackNotFoundException.class);
+
+        assertThrows(FeedBackNotFoundException.class, () -> feedBackService.update("Id_Invalid", FEED_BACK_REQUEST02_ORDER_TO_UPDATE));
+        verify(feedBackRepository, times(1)).findById(anyString());
+        verify(feedBackRepository, never()).save(any());
+    }
+
+    @Test
+    void update_With_OrderIdInvalid_ThrowsOrderNotFoundException(){
+        when(feedBackRepository.findById(FEED_BACK_CREATED_IN_DB_DTO.getId())).thenReturn(Optional.of(FEED_BACK_CREATED_IN_DB));
+        when(orderFeign.getOrderById(FEED_BACK_REQUEST0_OrderIdInvalid.getOrderId())).thenThrow(OrderNotFoundException.class);
+
+        assertThrows(OrderNotFoundException.class, () -> feedBackService.update(FEED_BACK_UPDATED_IN_DB_DTO.getId(), FEED_BACK_REQUEST0_OrderIdInvalid));
+        verify(feedBackRepository, times(1)).findById(anyString());
+        verify(orderFeign, times(1)).getOrderById(anyString());
+        verify(feedBackRepository, never()).save(any());
+    }
+
+    @Test
+    void update_With_OrderAlreadyCANCELED_ThrowsNotPossibleToCommentOrderException(){
+        when(feedBackRepository.findById(FEED_BACK_CREATED_IN_DB_DTO.getId())).thenReturn(Optional.of(FEED_BACK_CREATED_IN_DB));
+        when(orderFeign.getOrderById(FEED_BACK_REQUEST02_ORDER_CANCELED.getOrderId())).thenReturn(ORDER_MODEL01_CANCELED);
+
+        assertThrows(NotPossibleToCommentOrderException.class, () -> feedBackService.update(FEED_BACK_CREATED_IN_DB_DTO.getId(), FEED_BACK_REQUEST02_ORDER_CANCELED));
+        verify(feedBackRepository, times(1)).findById(anyString());
+        verify(orderFeign, times(1)).getOrderById(anyString());
+        verify(feedBackRepository, never()).save(any());
+    }
+
 
 }

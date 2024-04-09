@@ -43,6 +43,12 @@ public class FeedBackService {
         return new FeedBackDTO(feedBack);
     }
 
+    public FeedBackDTO update(String id, FeedBackRequest feedBackRequest){
+        FeedBack feedBack = feedBackRepository.save(updateFeedBack(id, feedBackRequest));
+
+        return new FeedBackDTO(feedBack);
+    }
+
     private FeedBack createFeedBack(FeedBackRequest feedBackDTO) {
         try {
             OrderModel orderModel = orderFeign.getOrderById(feedBackDTO.getOrderId());
@@ -51,7 +57,14 @@ public class FeedBackService {
         } catch (FeignException.FeignClientException e) {
             throw new OrderNotFoundException();
         }
+    }
 
+    private FeedBack updateFeedBack(String id, FeedBackRequest request){
+        FeedBackDTO feedBackInDB = getById(id);
+
+        FeedBack feedBackCreated = createFeedBack(request);
+
+        return new FeedBack(feedBackInDB.getId(), feedBackCreated);
     }
 
 

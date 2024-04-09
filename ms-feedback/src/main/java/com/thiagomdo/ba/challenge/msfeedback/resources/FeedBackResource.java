@@ -19,19 +19,19 @@ public class FeedBackResource {
     FeedBackService feedBackService;
 
     @GetMapping
-    public ResponseEntity<List<FeedBackDTO>> getAllFeedBack(){
+    public ResponseEntity<List<FeedBackDTO>> getAllFeedBack() {
         List<FeedBackDTO> listFeedBack = feedBackService.getAll();
         return ResponseEntity.ok().body(listFeedBack);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FeedBackDTO> getFeedBackById(@PathVariable String id){
+    public ResponseEntity<FeedBackDTO> getFeedBackById(@PathVariable String id) {
         FeedBackDTO feedBackDTO = feedBackService.getById(id);
         return ResponseEntity.ok().body(feedBackDTO);
     }
 
     @PostMapping
-    public ResponseEntity<FeedBackDTO> createFeedBack(@RequestBody FeedBackRequest request){
+    public ResponseEntity<FeedBackDTO> createFeedBack(@RequestBody FeedBackRequest request) {
         FeedBackDTO feedBackDTO = feedBackService.create(request);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -40,4 +40,10 @@ public class FeedBackResource {
         return ResponseEntity.created(uri).body(feedBackDTO);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<FeedBackDTO> updateFeedBack(@PathVariable String id, @RequestBody FeedBackRequest request) {
+        FeedBackDTO feedBackDTO = feedBackService.update(id, request);
+
+        return ResponseEntity.ok().body(feedBackDTO);
+    }
 }

@@ -20,8 +20,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FeedBackResource.class)
@@ -58,7 +57,7 @@ public class FeedBackResourceTests {
     }
 
     @Test
-    void getAllFeedBack_With_IdValid_ReturnsFeedBackDTO_Status200() throws Exception{
+    void getFeedBackById_With_IdValid_ReturnsFeedBackDTO_Status200() throws Exception{
         when(feedBackService.getById(FEED_BACK01.getId())).thenReturn(FEED_BACK01_DTO);
 
         mockMvc.perform(get("/feedbacks/" + FEED_BACK01.getId()))
@@ -67,7 +66,7 @@ public class FeedBackResourceTests {
     }
 
     @Test
-    void getAllFeedBack_With_InvalidIdValid_ThrowsFeedBackNotFoundException_Status400() throws Exception{
+    void getFeedBackById_With_InvalidIdValid_ThrowsFeedBackNotFoundException_Status400() throws Exception{
         when(feedBackService.getById("Id_Invalid")).thenThrow(FeedBackNotFoundException.class);
 
         mockMvc.perform(get("/feedbacks/Id_Invalid"))
@@ -75,7 +74,7 @@ public class FeedBackResourceTests {
     }
 
     @Test
-    void createFeedBack_With_ValidData_ReturnsFeedBackDTO_Status200() throws Exception{
+    void createFeedBack_With_ValidData_ReturnsFeedBackDTO_Status201() throws Exception{
         when(feedBackService.create(FEED_BACK_REQUEST01)).thenReturn(FEED_BACK_CREATED_IN_DB_DTO);
 
         mockMvc.perform(post("/feedbacks")
@@ -94,12 +93,51 @@ public class FeedBackResourceTests {
         .andExpect(status().isNotFound());
     }
 
-
     @Test
     void createFeedBack_With_OrderAlreadyCANCELED_ThrowsNotPossibleToCommentOrderException() throws Exception{
         when(feedBackService.create(FEED_BACK_REQUEST02_ORDER_CANCELED)).thenThrow(NotPossibleToCommentOrderException.class);
 
         mockMvc.perform(post("/feedbacks")
+        .content(objectMapper.writeValueAsString(FEED_BACK_REQUEST02_ORDER_CANCELED))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateFeedBack_With_ValidData_ReturnsFeedBackDTO_Status200() throws Exception{
+        when(feedBackService.update(FEED_BACK_UPDATED_IN_DB_DTO.getId(), FEED_BACK_REQUEST01)).thenReturn(FEED_BACK_UPDATED_IN_DB_DTO);
+
+        mockMvc.perform(put("/feedbacks/" + FEED_BACK_UPDATED_IN_DB_DTO.getId())
+        .content(objectMapper.writeValueAsString(FEED_BACK_REQUEST01))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    void updateFeedBack_With_InvalidIdValid_ThrowsFeedBackNotFoundException_Status400() throws Exception{
+        when(feedBackService.update("Id_Invalid", FEED_BACK_REQUEST01)).thenThrow(FeedBackNotFoundException.class);
+
+        mockMvc.perform(put("/feedbacks/Id_Invalid")
+        .content(objectMapper.writeValueAsString(FEED_BACK_REQUEST01))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateFeedBack_With_OrderIdInvalid_ThrowsOrderNotFoundException_Status404() throws Exception{
+        when(feedBackService.update(FEED_BACK_UPDATED_IN_DB_DTO.getId(), FEED_BACK_REQUEST0_OrderIdInvalid)).thenThrow(OrderNotFoundException.class);
+
+        mockMvc.perform(put("/feedbacks/" + FEED_BACK_UPDATED_IN_DB_DTO.getId())
+        .content(objectMapper.writeValueAsString(FEED_BACK_REQUEST0_OrderIdInvalid))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateFeedBack_With_OrderAlreadyCANCELED_ThrowsNotPossibleToCommentOrderException() throws Exception{
+        when(feedBackService.update(FEED_BACK_UPDATED_IN_DB_DTO.getId(), FEED_BACK_REQUEST02_ORDER_CANCELED)).thenThrow(NotPossibleToCommentOrderException.class);
+
+        mockMvc.perform(put("/feedbacks/" + FEED_BACK_UPDATED_IN_DB_DTO.getId())
         .content(objectMapper.writeValueAsString(FEED_BACK_REQUEST02_ORDER_CANCELED))
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());

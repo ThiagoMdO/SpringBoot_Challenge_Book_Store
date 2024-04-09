@@ -28,14 +28,19 @@ public class FeedBackConstants {
     public static final FeedBackRequest FEED_BACK_REQUEST01 = new FeedBackRequest(Scale.NEUTRAL, "Neutro", "6605903e1e2d5c55c2017223");
     public static final FeedBackRequest FEED_BACK_REQUEST0_OrderIdInvalid = new FeedBackRequest(Scale.NEUTRAL, "Neutro", "OrderIdInvalid");
     public static final FeedBackRequest FEED_BACK_REQUEST02_ORDER_CANCELED = new FeedBackRequest(Scale.NEUTRAL, "Neutro", "6605903e1e2d5c55c20171111");
+    public static final FeedBackRequest FEED_BACK_REQUEST02_ORDER_TO_UPDATE = new FeedBackRequest(Scale.SATISFIED, "Any other comment", "6605903e1e2d5c55c20171111");
 
     public static final OrderModel ORDER_MODEL01_CONFIRMED = new OrderModel("6605903e1e2d5c55c2017223", "CONFIRMED");
     public static final OrderModel ORDER_MODEL01_CANCELED = new OrderModel("6605903e1e2d5c55c20171111", "CANCELED");
 
     public static final FeedBack FEED_BACK_CREATED = new FeedBack(FEED_BACK_REQUEST01, ORDER_MODEL01_CONFIRMED.getId());
+    public static final FeedBack FEED_BACK_UPDATED = new FeedBack(FEED_BACK_REQUEST02_ORDER_TO_UPDATE, ORDER_MODEL01_CONFIRMED.getId());
 
     public static final FeedBack FEED_BACK_CREATED_IN_DB = new FeedBack("6605903e1e2d5c55c2017777", FEED_BACK_CREATED);
     public static final FeedBackDTO FEED_BACK_CREATED_IN_DB_DTO = new FeedBackDTO(FEED_BACK_CREATED_IN_DB);
+
+    public static final FeedBack FEED_BACK_UPDATED_IN_DB = new FeedBack("6605903e1e2d5c55c2017777", FEED_BACK_UPDATED);
+    public static final FeedBackDTO FEED_BACK_UPDATED_IN_DB_DTO = new FeedBackDTO(FEED_BACK_UPDATED_IN_DB);
 
 
 }
