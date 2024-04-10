@@ -1,7 +1,6 @@
 package com.thiagomdo.ba.challenge.msproducts.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import com.thiagomdo.ba.challenge.msproducts.resources.ProductResource;
 import com.thiagomdo.ba.challenge.msproducts.services.ProductService;
 import com.thiagomdo.ba.challenge.msproducts.services.exception.*;
@@ -14,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.thiagomdo.ba.challenge.msproducts.common.ProductConstants.*;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -72,10 +70,11 @@ class ProductResourceTests {
     }
 
     @Test
-    void findProductById_ByUnexistingId_ThrowsProductNotFoundException_Status404(){
+    void findProductById_ByUnexistingId_ThrowsProductNotFoundException_Status404() throws Exception{
         when(productService.findById("IncorrectIdProduct")).thenThrow(ProductNotFoundException.class);
 
-        assertThrows(ProductNotFoundException.class, () -> productService.findById("IncorrectIdProduct"));
+        mockMvc.perform(get("/products/IncorrectIdProduct"))
+        .andExpect(status().isNotFound());
     }
 
     @Test
@@ -89,23 +88,32 @@ class ProductResourceTests {
     }
 
     @Test
-    void createProduct_With_NameAlreadyExist_ThrowsProductAlreadyExistException_Status409(){
+    void createProduct_With_NameAlreadyExist_ThrowsProductAlreadyExistException_Status409() throws Exception{
         when(productService.createProduct(PRODUCT_DTO)).thenThrow(ProductAlreadyExistException.class);
 
-        assertThrows(ProductAlreadyExistException.class, () -> productService.createProduct(PRODUCT_DTO));
+        mockMvc.perform(post("/products")
+        .content(objectMapper.writeValueAsString(PRODUCT_DTO))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isConflict());
     }
 
     @Test
-    void createProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException_Status400(){
+    void createProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException_Status400() throws Exception{
         when(productService.createProduct(PRODUCT_DESCRIPTION_LESS_TEEN_DTO)).thenThrow(MinDescriptionException.class);
 
-        assertThrows(MinDescriptionException.class, () -> productService.createProduct(PRODUCT_DESCRIPTION_LESS_TEEN_DTO));
+        mockMvc.perform(post("/products")
+        .content(objectMapper.writeValueAsString(PRODUCT_DESCRIPTION_LESS_TEEN_DTO))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
     }
     @Test
-    void createProduct_With_ValueLessThanZero_ThrowsMinValueException_Status400(){
+    void createProduct_With_ValueLessThanZero_ThrowsMinValueException_Status400() throws Exception{
         when(productService.createProduct(PRODUCT_VALUE_LESS_ZERO_DTO)).thenThrow(MinValueException.class);
 
-        assertThrows(MinValueException.class, () -> productService.createProduct(PRODUCT_VALUE_LESS_ZERO_DTO));
+        mockMvc.perform(post("/products")
+        .content(objectMapper.writeValueAsString(PRODUCT_VALUE_LESS_ZERO_DTO))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -122,35 +130,50 @@ class ProductResourceTests {
     void updateProduct_With_IdProductNotFound_ThrowsProductNotFoundException_Status404() throws Exception{
         when(productService.updateProduct("IncorrectIdProduct", PRODUCT_DTO)).thenThrow(ProductNotFoundException.class);
 
-        assertThrows(ProductNotFoundException.class, ()-> productService.updateProduct("IncorrectIdProduct", PRODUCT_DTO));
+        mockMvc.perform(put("/products/IncorrectIdProduct")
+        .content(objectMapper.writeValueAsString(PRODUCT_DTO))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
     }
 
     @Test
-    void updateProduct_With_NameInUsingForAnotherProduct_ThrowsProductAlreadyExistException_Status409(){
+    void updateProduct_With_NameIsUsingForAnotherProduct_ThrowsProductAlreadyExistException_Status409() throws Exception{
         when(productService.updateProduct("dasfx3", PRODUCT_DTO)).thenThrow(ProductAlreadyExistException.class);
 
-        assertThrows(ProductAlreadyExistException.class, () -> productService.updateProduct("dasfx3", PRODUCT_DTO));
+        mockMvc.perform(put("/products/dasfx3")
+        .content(objectMapper.writeValueAsString(PRODUCT_DTO))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isConflict());
     }
 
     @Test
-    void updateProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException_Status400() {
+    void updateProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException_Status400() throws Exception{
         when(productService.updateProduct("dasfx3", PRODUCT_DESCRIPTION_LESS_TEEN_DTO)).thenThrow(MinDescriptionException.class);
 
-        assertThrows(MinDescriptionException.class, () -> productService.updateProduct("dasfx3", PRODUCT_DESCRIPTION_LESS_TEEN_DTO));
+        mockMvc.perform(put("/products/dasfx3")
+        .content(objectMapper.writeValueAsString(PRODUCT_DESCRIPTION_LESS_TEEN_DTO))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
     }
 
     @Test
-    void updateProduct_With_ValueIsNull_ThrowsMinDescriptionException_Status400(){
+    void updateProduct_With_ValueIsNull_ThrowsMinDescriptionException_Status400() throws Exception{
         when(productService.updateProduct("dasfx3", PRODUCT_VALUE_IS_NULL_DTO)).thenThrow(MinValueException.class);
 
-        assertThrows(MinValueException.class, () -> productService.updateProduct("dasfx3", PRODUCT_VALUE_IS_NULL_DTO));
+        mockMvc.perform(put("/products/dasfx3")
+        .content(objectMapper.writeValueAsString(PRODUCT_VALUE_IS_NULL_DTO))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
     }
 
     @Test
-    void updateProduct_With_ValueLessThanZero_ThrowsMinValueException(){
+    void updateProduct_With_ValueLessThanZero_ThrowsMinValueException() throws Exception{
         when(productService.updateProduct("dasfx3", PRODUCT_VALUE_LESS_ZERO_DTO)).thenThrow(MinValueException.class);
 
-        assertThrows(MinValueException.class, () -> productService.updateProduct("dasfx3", PRODUCT_VALUE_LESS_ZERO_DTO));
+        mockMvc.perform(put("/products/dasfx3")
+        .content(objectMapper.writeValueAsString(PRODUCT_VALUE_LESS_ZERO_DTO))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -164,10 +187,11 @@ class ProductResourceTests {
     }
 
     @Test
-    void deleteProductById_With_IdProductUnexistingInDB_ThrowsProductNotFoundException(){
+    void deleteProductById_With_IdProductUnexistingInDB_ThrowsProductNotFoundException() throws Exception{
         doThrow(ProductNotFoundException.class).when(productService).deleteProduct("InvalidId");
 
-        assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct("InvalidId"));
+        mockMvc.perform(delete("/products/InvalidId"))
+        .andExpect(status().isNotFound());
     }
 
 }

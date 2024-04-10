@@ -41,6 +41,7 @@ class ProductServiceTests {
 
         assertThat(result).isNotNull();
         assertThat(result).containsExactlyElementsOf(PRODUCT_DTO_LIST);
+        verify(productRepository, times(1)).findAll();
     }
 
     @Test
@@ -61,11 +62,12 @@ class ProductServiceTests {
 
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(PRODUCT_DTO);
+        verify(productRepository, times(1)).findById(any());
     }
 
     @Test
     void findById_ByUnexistingId_ThrowsProductNotFoundException(){
-        final String unexistingId = "1234qwer";
+        final String unexistingId = "Id_invalid";
         when(productRepository.findById(unexistingId)).thenReturn(Optional.empty());
 
         assertThrows(ProductNotFoundException.class, () -> productService.findById(unexistingId));
@@ -74,7 +76,6 @@ class ProductServiceTests {
     @Test
     void createProduct_With_ValidData_ReturnsProductDTO(){
         when(productRepository.findByName(O_CORACAO_DO_MUNDO_BOOK_DTO.getName())).thenReturn(null);
-
         when(productRepository.save(any(Product.class))).thenReturn(O_CORACAO_DO_MUNDO_BOOK);
 
         ProductDTO result = productService.createProduct(O_CORACAO_DO_MUNDO_BOOK_DTO);
@@ -96,22 +97,18 @@ class ProductServiceTests {
 
     @Test
     void createProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException(){
-        ProductService productServiceMock = mock(ProductService.class);
-        when(productServiceMock.createProduct(PRODUCT_DESCRIPTION_LESS_TEEN_DTO)).thenThrow(MinDescriptionException.class);
 
-        assertThat(PRODUCT_DESCRIPTION_LESS_TEEN.getDescription().length()).isLessThan(10);
-        assertThrows(MinDescriptionException.class, () -> productServiceMock.createProduct(PRODUCT_DESCRIPTION_LESS_TEEN_DTO));
-        verify(productRepository, never()).save(O_CORACAO_DO_MUNDO_BOOK);
+        assertThrows(MinDescriptionException.class, () -> productService.createProduct(PRODUCT_DESCRIPTION_LESS_TEEN_DTO));
+        verify(productRepository, times(1)).findByName(PRODUCT_DESCRIPTION_LESS_TEEN_DTO.getName());
+        verify(productRepository, never()).save(any());
     }
 
     @Test
     void createProduct_With_ValueLessThanZero_ThrowsMinValueException(){
-        ProductService productServiceMock = mock(ProductService.class);
-        when(productServiceMock.createProduct(PRODUCT_VALUE_LESS_ZERO_DTO)).thenThrow(MinValueException.class);
 
-        assertThat(PRODUCT_VALUE_LESS_ZERO_DTO.getValue()).isNegative();
-        assertThrows(MinValueException.class, () -> productServiceMock.createProduct(PRODUCT_VALUE_LESS_ZERO_DTO));
-        verify(productRepository, never()).save(O_CORACAO_DO_MUNDO_BOOK);
+        assertThrows(MinValueException.class, () -> productService.createProduct(PRODUCT_VALUE_LESS_ZERO_DTO));
+        verify(productRepository, times(1)).findByName(PRODUCT_VALUE_LESS_ZERO_DTO.getName());
+        verify(productRepository, never()).save(any());
     }
 
     @Test
@@ -139,10 +136,11 @@ class ProductServiceTests {
 
     @Test
     void updateProduct_With_IdProductNotFound_ThrowsProductNotFoundException(){
-        when(productRepository.findById("IdNotValidProduct")).thenThrow(new ProductNotFoundException());
+        when(productRepository.findById("IdNotValidProduct")).thenThrow(ProductNotFoundException.class);
 
         assertThrows(ProductNotFoundException.class, () -> productService.updateProduct("IdNotValidProduct", PRODUCT_DTO));
         verify(productRepository, never()).save(O_CORACAO_DO_MUNDO_BOOK);
+        verify(productRepository, times(1)).findById(any());
     }
 
     @Test
@@ -152,49 +150,59 @@ class ProductServiceTests {
 
         assertThrows(ProductAlreadyExistException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), ALERTA_VERMELHO_BOOK_DTO));
         verify(productRepository, never()).save(O_CORACAO_DO_MUNDO_BOOK);
+        verify(productRepository, times(1)).findById(any());
+        verify(productRepository, times(1)).findByName(any());
     }
 
     @Test
     void updateProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException(){
         when(productRepository.findById(SAPIENS_BOOK.getId())).thenReturn(Optional.of(SAPIENS_BOOK));
-        when(productRepository.findByName(any(String.class))).thenReturn(null);
+        when(productRepository.findByName("AVAILABLE_NAME_DTO")).thenReturn(null);
         when(productRepository.findByName(PRODUCT_DESCRIPTION_LESS_TEEN.getName())).thenReturn(PRODUCT_DESCRIPTION_LESS_TEEN);
 
         assertThrows(MinDescriptionException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_DESCRIPTION_LESS_TEEN_AVAILABLE_NAME_DTO));
         assertThrows(MinDescriptionException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_DESCRIPTION_LESS_TEEN_DTO));
         verify(productRepository, never()).save(O_CORACAO_DO_MUNDO_BOOK);
+        verify(productRepository, times(2)).findById(any());
+        verify(productRepository, times(2)).findByName(any());
     }
 
     @Test
     void updateProduct_With_ValueIsNull_Throws_ThrowsMinValueException(){
         when(productRepository.findById(SAPIENS_BOOK.getId())).thenReturn(Optional.of(SAPIENS_BOOK));
-        when(productRepository.findByName(any(String.class))).thenReturn(null);
+        when(productRepository.findByName("AVAILABLE_NAME_DTO")).thenReturn(null);
         when(productRepository.findByName(PRODUCT_VALUE_IS_NULL_DTO.getName())).thenReturn(PRODUCT_VALUE_IS_NULL);
 
         assertThrows(MinValueException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_VALUE_IS_NULL_AVAILABLE_NAME_DTO));
         assertThrows(MinValueException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_VALUE_IS_NULL_DTO));
         verify(productRepository, never()).save(O_CORACAO_DO_MUNDO_BOOK);
+        verify(productRepository, times(2)).findById(any());
+        verify(productRepository, times(2)).findByName(any());
     }
 
     @Test
     void updateProduct_With_ValueLessThanZero_ThrowsMinValueException(){
         when(productRepository.findById(SAPIENS_BOOK.getId())).thenReturn(Optional.of(SAPIENS_BOOK));
-        when(productRepository.findByName(any(String.class))).thenReturn(null);
+        when(productRepository.findByName("AVAILABLE_NAME_DTO")).thenReturn(null);
         when(productRepository.findByName(PRODUCT_VALUE_LESS_ZERO_DTO.getName())).thenReturn(PRODUCT_VALUE_LESS_ZERO);
 
         assertThrows(MinValueException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_VALUE_LESS_ZERO_AVAILABLE_NAME_DTO));
         assertThrows(MinValueException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_VALUE_LESS_ZERO_DTO));
         verify(productRepository, never()).save(O_CORACAO_DO_MUNDO_BOOK);
+        verify(productRepository, times(2)).findById(any());
+        verify(productRepository, times(2)).findByName(any());
     }
 
     @Test
     void deleteProduct_With_IdProductExistingInDB_ReturnsVoid(){
-        when(productRepository.findById("asdaf2")).thenReturn(Optional.of(PRODUCT));
+        when(productRepository.findById(PRODUCT.getId())).thenReturn(Optional.of(PRODUCT));
 
-        productService.deleteProduct("asdaf2");
+        productService.deleteProduct(PRODUCT.getId());
 
-        verify(productRepository).findById("asdaf2");
-        verify(productRepository).deleteById("asdaf2");
+        verify(productRepository).findById(PRODUCT.getId());
+        verify(productRepository).deleteById(PRODUCT.getId());
+        verify(productRepository, times(1)).deleteById(any());
+        verify(productRepository, times(1)).findById(any());
     }
 
     @Test
@@ -203,5 +211,6 @@ class ProductServiceTests {
 
         assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct("IncorrectId"));
         verify(productRepository, never()).deleteById(any(String.class));
+        verify(productRepository, times(1)).findById("IncorrectId");
     }
 }

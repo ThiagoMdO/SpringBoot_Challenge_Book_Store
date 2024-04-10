@@ -15,7 +15,7 @@ public class ProductNotFoundException extends RuntimeException {
 
     private final HttpStatus status;
 
-    public ProductNotFoundException() {
+    public ProductNotFoundException(){
         super(ErrorCode.NOT_FOUND.name());
         this.errorCode = ErrorCode.NOT_FOUND;
         this.status = HttpStatus.NOT_FOUND;

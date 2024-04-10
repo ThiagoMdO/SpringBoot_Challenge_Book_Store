@@ -20,43 +20,13 @@ public class Problem {
     private final String message;
 
 
-    public Problem(ErrorCode errorCode, ProductNotFoundException exception){
-        this.code = exception.getStatus().value();
-        this.status = errorCode.name();
-        this.message = errorCode.getMessage();
-    }
-
-    public Problem(ErrorCode errorCode, EmptyListException exception){
-        this.code =exception.getStatus().value();
-        this.status = errorCode.name();
-        this.message = errorCode.getMessage();
-    }
-
-    public Problem(ErrorCode errorCode, ProductAlreadyExistException exception){
-        this.code =exception.getStatus().value();
-        this.status = errorCode.name();
-        this.message = errorCode.getMessage();
-    }
-
-    public Problem(ErrorCode errorCode, MinDescriptionException exception){
-        this.code =exception.getStatus().value();
-        this.status = errorCode.name();
-        this.message = errorCode.getMessage();
-    }
-
-    public Problem(ErrorCode errorCode, MinValueException exception){
-        this.code =exception.getStatus().value();
-        this.status = errorCode.name();
-        this.message = errorCode.getMessage();
-    }
-
-    public Problem(ErrorCode errorCode){
+    public Problem(ErrorCode errorCode) {
         this.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
         this.status = errorCode.name();
         this.message = errorCode.getMessage();
     }
 
-    public Problem(ErrorCode errorCode, HttpStatus httpStatus){
+    public Problem(ErrorCode errorCode, HttpStatus httpStatus) {
         this.code = httpStatus.value();
         this.status = errorCode.name();
         this.message = errorCode.getMessage();

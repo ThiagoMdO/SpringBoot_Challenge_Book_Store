@@ -34,10 +34,10 @@ public class ProductDTO {
     }
 
     public ProductDTO (Product product){
-        this.id = product.getId();
-        this.name = product.getName();
-        this.description = product.getDescription();
-        this.value = product.getValue();
+        id = product.getId();
+        name = product.getName();
+        description = product.getDescription();
+        value = product.getValue();
     }
 
 }

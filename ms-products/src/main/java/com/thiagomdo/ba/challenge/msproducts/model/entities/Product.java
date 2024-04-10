@@ -4,7 +4,6 @@ import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serial;
@@ -38,9 +37,16 @@ public class Product implements Serializable {
     private Double value;
 
     public Product(ProductDTO productDTO){
-        this.name = productDTO.getName();
-        this.description = productDTO.getDescription();
-        this.value = productDTO.getValue();
+        name = productDTO.getName();
+        description = productDTO.getDescription();
+        value = productDTO.getValue();
+    }
+
+    public Product(String idInDB, ProductDTO productDTO){
+        id = idInDB;
+        name = productDTO.getName();
+        description = productDTO.getDescription();
+        value = productDTO.getValue();
     }
 
 }

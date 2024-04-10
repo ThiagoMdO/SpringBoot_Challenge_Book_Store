@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,55 +25,59 @@ public class ProductService {
     }
 
     public ProductDTO findById(String id) {
-        Optional<Product> product = productRepository.findById(id);
-        if (product.isEmpty()) throw new ProductNotFoundException();
-        return new ProductDTO(product.get());
+        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        return new ProductDTO(product);
     }
 
     public ProductDTO createProduct(ProductDTO productDTO) {
-        Product result = productRepository.findByName(productDTO.getName());
+        builderCreateProduct(productDTO);
 
-        if (result != null) throw new ProductAlreadyExistException();
-        if (productDTO.getDescription().length() < 10) throw new MinDescriptionException();
-        if (productDTO.getValue() < 0) throw new MinValueException();
-
-        result = productRepository.save(new Product(productDTO));
-
-        return new ProductDTO(result);
+        return new ProductDTO(productRepository.save(new Product(productDTO)));
     }
 
-    public ProductDTO updateProduct(String id, ProductDTO dtoRequest){
+    public ProductDTO updateProduct(String id, ProductDTO dtoRequest) {
+        testsUpdateProduct(id, dtoRequest);
 
-        ProductDTO testProductId = findById(id); //NOME = SAPIENS
+        Product product = productRepository.save(new Product(id, dtoRequest));
 
-        Product testProductExist = productRepository.findByName(dtoRequest.getName()); // Alerta vermelho
-        if (dtoRequest.getDescription().length() < 10) throw new MinDescriptionException();
-
-        if (testProductExist != null && !Objects.equals(testProductId.getName(), testProductExist.getName())){
-            throw new ProductAlreadyExistException();
-        }
-
-        if (dtoRequest.getValue() == null || dtoRequest.getValue() < 0) throw new MinValueException();
-
-        Product productInDB = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
-
-        productInDB = ConvertDTORequestToRepository(productInDB, dtoRequest);
-
-        productRepository.save(productInDB);
-
-        return new ProductDTO(productInDB);
+        return new ProductDTO(product);
     }
 
-    public static Product ConvertDTORequestToRepository(Product dtoRepository, ProductDTO dtoRequest){
-        dtoRepository.setName(dtoRequest.getName());
-        dtoRepository.setDescription(dtoRequest.getDescription());
-        dtoRepository.setValue(dtoRequest.getValue());
-        return dtoRepository;
-    }
-
-    public void deleteProduct(String id){
+    public void deleteProduct(String id) {
         findById(id);
         productRepository.deleteById(id);
+    }
+
+    private void builderCreateProduct(ProductDTO productDTO) {
+        testProductAlreadyExistingInCreate(productDTO);
+
+        testFieldsRequestCorrect(productDTO);
+    }
+
+    private void testFieldsRequestCorrect(ProductDTO productDTO) {
+        if (productDTO.getDescription().length() < 10) throw new MinDescriptionException();
+        if (productDTO.getValue() == null || productDTO.getValue() < 0) throw new MinValueException();
+    }
+
+    private void testProductAlreadyExistingInCreate(ProductDTO productDTO) {
+        Product search = productRepository.findByName(productDTO.getName());
+
+        if (search != null) throw new ProductAlreadyExistException();
+    }
+
+    private void testsUpdateProduct(String id, ProductDTO productDTO) {
+        testProductAlreadyExistingInUpdate(id, productDTO);
+
+        testFieldsRequestCorrect(productDTO);
+    }
+
+    private void testProductAlreadyExistingInUpdate(String id, ProductDTO productDTO) {
+        ProductDTO testProductId = findById(id);
+        Product testProductExist = productRepository.findByName(productDTO.getName());
+
+        if (testProductExist != null && !Objects.equals(testProductId.getName(), testProductExist.getName())) {
+            throw new ProductAlreadyExistException();
+        }
     }
 
 }

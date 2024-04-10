@@ -35,4 +35,10 @@ public class HandlerException {
         var problem = new Problem(ErrorCode.ORDER_NOT_FOUND, HttpStatus.NOT_FOUND);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handlerException(){
+        var problem = new Problem(ErrorCode.SYSTEM_ERROR);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(problem);
+    }
 }
