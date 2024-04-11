@@ -47,7 +47,6 @@ public class OrderService {
     }
 
     public OrderDTO update(String id, OrderRequestActualization requestActualization) {
-        /* arrumar caso não tiver cep invalido, não encontrado */
         OrderResponse orderResponse = orderRepository.save(createOrderResponseToUpdate(id, requestActualization));
         return new OrderDTO(orderResponse);
     }
@@ -72,7 +71,7 @@ public class OrderService {
         return orderResponse;
     }
 
-    private void testStatus(Status status){
+    private void testStatus(Status status) {
         //Redundancia necessaria de checar se a ordem já foi cancelada para não atualizar novamente a dada de cancelamento
         if (status.equals(Status.SENT) ||
         status.equals(Status.CANCELED)) throw new NotPossibleToChangeStatusException();
@@ -139,12 +138,9 @@ public class OrderService {
     }
 
     private AddressClientViaCepResponse consultViaCepAddress(AddressClientViaCepRequest viaCepRequest, Long number) {
-        try {
-            AddressByCep addressByCepFeign = viaCepFeign.searchLocationByCep(viaCepRequest.getPostalCode());
-            return new AddressClientViaCepResponse(addressByCepFeign, number);
-        } catch (RuntimeException e) {
-            throw new AddressIncorrectException();
-        }
+        AddressByCep addressByCepFeign = viaCepFeign.searchLocationByCep(viaCepRequest.getPostalCode());
+        if (addressByCepFeign.getLocalidade() == null) throw new AddressIncorrectException();
+        return new AddressClientViaCepResponse(addressByCepFeign, number);
     }
 
 

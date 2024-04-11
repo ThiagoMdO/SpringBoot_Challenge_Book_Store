@@ -67,6 +67,31 @@ public class OrderResponse {
         status = Status.CONFIRMED;
     }
 
+    public OrderResponse(String idInDB, OrderRequest orderRequest, Double subtotalValue, AddressClientViaCepResponse cepResponse) {
+        id = idInDB;
+        products = orderRequest.getProducts();
+        address.setStreet(orderRequest.getAddress().getStreet());
+        address.setNumber(orderRequest.getAddress().getNumber());
+        address.setComplement(cepResponse.getComplement());
+        address.setCity(cepResponse.getCity());
+        address.setState(cepResponse.getState());
+        address.setPostalCode(orderRequest.getAddress().getPostalCode());
+
+        paymentMethod = orderRequest.getPaymentMethod();
+        if (orderRequest.getPaymentMethod().equals(Payment_method.PIX)) {
+            discount = 0.05 * subtotalValue;
+            totalValue = subtotalValue - discount;
+        } else {
+            discount = 0.0;
+            totalValue = subtotalValue;
+        }
+
+        this.subtotalValue = subtotalValue;
+
+        createdDate = LocalDate.now();
+        status = Status.CONFIRMED;
+    }
+
     public OrderResponse(String id, List<ProductDTO> productDTOList, AddressClientViaCepResponse address, Payment_method paymentMethod,
                          Double subtotalValue, Double discount, Double totalValue, LocalDate createdDate,  Status status){
         this.id = id;

@@ -34,14 +34,9 @@ public class Instantiation implements CommandLineRunner {
 
         orderRepository.deleteAll();
 
-        ProductDTO p1 = new ProductDTO("6605903e1e2d5c55c2017277", 10L);
-        ProductDTO p2 = new ProductDTO("6605903e1e2d5c55c2017278", 12L);
+        ProductDTO p1 = new ProductDTO("6616929eb63057298df31491", 10L);
+        ProductDTO p2 = new ProductDTO("6616929eb63057298df31492", 10L);
 
-//        ProductDTO pDTO1 = productFeign.findProductById("6605cf4356de767ab57abb6f");
-//        ProductDTO pDTO2 = productFeign.findProductById("6605cf4356de767ab57abb71");
-//
-//        pDTO1.setQuantity(10L);
-//        pDTO2.setQuantity(20L);
 
         List<ProductDTO> listProducts1 = Arrays.asList(p1, p2);
 
@@ -62,7 +57,7 @@ public class Instantiation implements CommandLineRunner {
         oR1.setAddress(newAddress);
         oR1.setPaymentMethod(Payment_method.PIX);
 
-        Double productValue = 100.0;
+        Double productValue = 1500.0;
 
         OrderResponse o1 = new OrderResponse(oR1, productValue, cepResponse);
         o1.setSubtotalValue(productValue);
@@ -71,14 +66,9 @@ public class Instantiation implements CommandLineRunner {
         orderRepository.save(o1);
 
 
-        ProductDTO p3 = new ProductDTO("6605903e1e2d5c55c2017219", 112L);
-        ProductDTO p4 = new ProductDTO("6605903e1e2d5c55c2017154", 60L);
+        ProductDTO p3 = new ProductDTO("6616929eb63057298df31492", 10L);
+        ProductDTO p4 = new ProductDTO("6616929eb63057298df31491", 10L);
 
-//        ProductDTO pDTO1 = productFeign.findProductById("6605cf4356de767ab57abb6f");
-//        ProductDTO pDTO2 = productFeign.findProductById("6605cf4356de767ab57abb71");
-//
-//        pDTO1.setQuantity(10L);
-//        pDTO2.setQuantity(20L);
 
         List<ProductDTO> listProducts2 = Arrays.asList(p3, p4);
 
@@ -99,7 +89,7 @@ public class Instantiation implements CommandLineRunner {
         oR2.setAddress(newAddress2);
         oR2.setPaymentMethod(Payment_method.BANK_TRANSFER);
 
-        Double productValue2 = 200.0;
+        Double productValue2 = 959.0;
 
         OrderResponse o2 = new OrderResponse(oR2, productValue2, cepResponse2);
         o2.setSubtotalValue(productValue2);

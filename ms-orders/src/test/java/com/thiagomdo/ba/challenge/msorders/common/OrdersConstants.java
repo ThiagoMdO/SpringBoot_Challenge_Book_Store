@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class OrdersConstants {
-    public static ProductDTO productDTO1 = new ProductDTO("6605903e1e2d5c55c2017225", 12L);
-    public static ProductDTO productDTO2 = new ProductDTO("6605903e1e2d5c55c2017226", 32L);
+    public static ProductDTO productDTO1 = new ProductDTO("6616929eb63057298df31491", 10L);
+    public static ProductDTO productDTO2 = new ProductDTO("6616929eb63057298df31490", 10L);
     public static ProductDTO productDTO3 = new ProductDTO("6605903e1e2d5c55c2017228", 12L);
     public static ProductDTO productDTO4 = new ProductDTO("6605903e1e2d5c55c2017221", 41L);
     public static ProductDTO productDTO_WITH_ID_INVALID = new ProductDTO("InvalidIdProduct", 41L);
@@ -128,13 +128,18 @@ public class OrdersConstants {
     ADDRESS_BY_CEP, ORDER_REQUEST.getAddress().getNumber());
     public static AddressClientViaCepResponse VIA_CEP_RESPONSE_ADDRESS_INVALID = new AddressClientViaCepResponse(
     ADDRESS_BY_CEP_INCORRECT_FIELDS, ORDER_REQUEST_WITH_ADDRESS_INVALID.getAddress().getNumber());
+    public static AddressClientViaCepResponse VIA_CEP_RESPONSE_TO_CREATE = new AddressClientViaCepResponse(
+    ADDRESS_BY_CEP_INCORRECT_FIELDS, ORDER_REQUEST.getAddress().getNumber());
 
 
     public static final OrderResponse ORDER_RESPONSE_INVALID_ADDRESS = new OrderResponse(
     "6605903e1e2d5c55c2017889", productDTOList, VIA_CEP_RESPONSE_ADDRESS_INVALID, Payment_method.BANK_TRANSFER, 200.00, 0.00, 200.00, LocalDate.now(), Status.CONFIRMED
     );
 
+    public static final OrderResponse ORDER_RESPONSE_TO_CREATE = new OrderResponse("6605903e1e2d5c55c2017890", ORDER_REQUEST, 1500.00, VIA_CEP_RESPONSE_TO_CREATE);
+
     public static final OrderDTO ORDER_RESPONSE_INVALID_ADDRESS_DTO = new OrderDTO(ORDER_RESPONSE_INVALID_ADDRESS);
+    public static final OrderDTO ORDER_RESPONSE_TO_CREATE_DTO = new OrderDTO(ORDER_RESPONSE_TO_CREATE);
 
 
     public static final OrderRequestActualization ORDER_REQUEST_ACTUALIZATION = new OrderRequestActualization(
