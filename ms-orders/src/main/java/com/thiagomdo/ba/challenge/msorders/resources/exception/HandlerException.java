@@ -50,9 +50,9 @@ public class HandlerException {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(problem);
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<Object> handlerException(){
-//        var problem = new Problem(ErrorCode.SYSTEM_ERROR);
-//        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(problem);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handlerException(){
+        var problem = new Problem(ErrorCode.SYSTEM_ERROR);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(problem);
+    }
 }
