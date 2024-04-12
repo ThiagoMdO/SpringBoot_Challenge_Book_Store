@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Description;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -30,6 +31,7 @@ class ProductResourceTests {
     private ProductService productService;
 
     @Test
+    @Description("Tests if the GET endpoint '/products' returns a list of products with valid data, verifying that it returns status code 200 (OK).")
     void findAllProducts_With_ValidData_ReturnsProductList_Status200() throws Exception {
 
         when(productService.findAll()).thenReturn(PRODUCT_DTO_LIST);

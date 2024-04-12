@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Description;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +35,9 @@ class ProductServiceTests {
 
 
     @Test
+    @DisplayName("FindAll: ValidData > ReturnsProductDTOList")
+    @Description("Tests if the findAll() method of the product service correctly retrieves a list of product DTOs " +
+    "when product data is available in the database.")
     void findAll_With_ValidData_ReturnsProductDTOList(){
         when(productRepository.findAll()).thenReturn(PRODUCT_LIST);
 
@@ -45,7 +49,9 @@ class ProductServiceTests {
     }
 
     @Test
-    @DisplayName("findAll")
+    @DisplayName("FindAll: EmptyList > ThrowsEmptyListException")
+    @Description("Tests if the findAll() method of the product service correctly throws an EmptyListException " +
+    "when no product data is available in the database.")
     void findAll_With_EmptyList_ThrowsEmptyListException(){
         when(productRepository.findAll()).thenReturn(Collections.emptyList());
 
@@ -55,6 +61,9 @@ class ProductServiceTests {
 
 
     @Test
+    @DisplayName("FindById: ValidData > ReturnsProductDTO")
+    @Description("Tests if the findById() method of the product service correctly retrieves a product DTO " +
+    "when a valid product ID is provided.")
     void findById_With_ValidData_ReturnsProductDTO(){
         when(productRepository.findById(PRODUCT.getId())).thenReturn(Optional.of(PRODUCT));
 
@@ -66,6 +75,9 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("FindById: ByUnexistingId > ThrowsProductNotFoundException")
+    @Description("Tests if the findById() method of the product service correctly throws a ProductNotFoundException " +
+    "when an unexisting product ID is provided.")
     void findById_ByUnexistingId_ThrowsProductNotFoundException(){
         final String unexistingId = "Id_invalid";
         when(productRepository.findById(unexistingId)).thenReturn(Optional.empty());
@@ -74,6 +86,9 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("CreateProduct: ValidData > ReturnsProductDTO")
+    @Description("Tests if the createProduct() method of the product service correctly creates and returns a product DTO " +
+    "when valid product data is provided.")
     void createProduct_With_ValidData_ReturnsProductDTO(){
         when(productRepository.findByName(O_CORACAO_DO_MUNDO_BOOK_DTO.getName())).thenReturn(null);
         when(productRepository.save(any(Product.class))).thenReturn(O_CORACAO_DO_MUNDO_BOOK);
@@ -88,6 +103,9 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("CreateProduct: NameAlreadyExist > ThrowsProductAlreadyExistException")
+    @Description("Tests if the createProduct() method of the product service correctly throws a ProductAlreadyExistException " +
+    "when attempting to create a product with a name that already exists.")
     void createProduct_With_NameAlreadyExist_ThrowsProductAlreadyExistException(){
         when(productRepository.findByName(O_CORACAO_DO_MUNDO_BOOK_DTO.getName())).thenReturn(O_CORACAO_DO_MUNDO_BOOK);
 
@@ -96,6 +114,9 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("CreateProduct: DescriptionLengthLessThanTen > ThrowsMinDescriptionException")
+    @Description("Tests if the createProduct() method of the product service correctly throws a MinDescriptionException " +
+    "when attempting to create a product with a description length less than ten.")
     void createProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException(){
 
         assertThrows(MinDescriptionException.class, () -> productService.createProduct(PRODUCT_DESCRIPTION_LESS_TEEN_DTO));
@@ -104,6 +125,9 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("CreateProduct: ValueLessThanZero > ThrowsMinValueException")
+    @Description("Tests if the createProduct() method of the product service correctly throws a MinValueException " +
+    "when attempting to create a product with a value less than zero.")
     void createProduct_With_ValueLessThanZero_ThrowsMinValueException(){
 
         assertThrows(MinValueException.class, () -> productService.createProduct(PRODUCT_VALUE_LESS_ZERO_DTO));
@@ -112,6 +136,9 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("UpdateProduct: ValidData > ReturnsProductDTO")
+    @Description("Tests if the updateProduct() method of the product service correctly updates and returns a product DTO " +
+    "when valid product data is provided.")
     void updateProduct_With_ValidData_ReturnsProductDTO(){
         when(productRepository.findById(ALERTA_VERMELHO_BOOK_DTO.getId())).thenReturn(Optional.of(ALERTA_VERMELHO_BOOK));
         when(productRepository.findByName("AvailableName")).thenReturn(null);
@@ -135,6 +162,9 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("UpdateProduct: IdProductNotFound > ThrowsProductNotFoundException")
+    @Description("Tests if the updateProduct() method of the product service correctly throws a ProductNotFoundException " +
+    "when an invalid product ID is provided.")
     void updateProduct_With_IdProductNotFound_ThrowsProductNotFoundException(){
         when(productRepository.findById("IdNotValidProduct")).thenThrow(ProductNotFoundException.class);
 
@@ -144,6 +174,9 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("UpdateProduct: NameInUsingForAnotherProduct > ThrowsProductAlreadyExistException")
+    @Description("Tests if the updateProduct() method of the product service correctly throws a ProductAlreadyExistException " +
+    "when attempting to update a product with a name that is already in use by another product.")
     void updateProduct_With_NameInUsingForAnotherProduct_ThrowsProductAlreadyExistException(){
         when(productRepository.findById(SAPIENS_BOOK_DTO.getId())).thenReturn(Optional.of(SAPIENS_BOOK));
         when(productRepository.findByName(ALERTA_VERMELHO_BOOK.getName())).thenReturn(ALERTA_VERMELHO_BOOK);
@@ -155,6 +188,9 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("UpdateProduct: DescriptionLengthLessThanTen > ThrowsMinDescriptionException")
+    @Description("Tests if the updateProduct() method of the product service correctly throws a MinDescriptionException " +
+    "when attempting to update a product with a description length less than ten.")
     void updateProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException(){
         when(productRepository.findById(SAPIENS_BOOK.getId())).thenReturn(Optional.of(SAPIENS_BOOK));
         when(productRepository.findByName("AVAILABLE_NAME_DTO")).thenReturn(null);
@@ -168,7 +204,10 @@ class ProductServiceTests {
     }
 
     @Test
-    void updateProduct_With_ValueIsNull_Throws_ThrowsMinValueException(){
+    @DisplayName("UpdateProduct: ValueIsNull > ThrowsMinValueException")
+    @Description("Tests if the updateProduct() method of the product service correctly throws a MinValueException " +
+    "when attempting to update a product with a null value.")
+    void updateProduct_With_ValueIsNull_ThrowsMinValueException(){
         when(productRepository.findById(SAPIENS_BOOK.getId())).thenReturn(Optional.of(SAPIENS_BOOK));
         when(productRepository.findByName("AVAILABLE_NAME_DTO")).thenReturn(null);
         when(productRepository.findByName(PRODUCT_VALUE_IS_NULL_DTO.getName())).thenReturn(PRODUCT_VALUE_IS_NULL);
@@ -181,9 +220,12 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("UpdateProduct: ValueLessThanZero > ThrowsMinValueException")
+    @Description("Tests if the updateProduct() method of the product service correctly throws a MinValueException " +
+    "when attempting to update a product with a value less than zero.")
     void updateProduct_With_ValueLessThanZero_ThrowsMinValueException(){
         when(productRepository.findById(SAPIENS_BOOK.getId())).thenReturn(Optional.of(SAPIENS_BOOK));
-        when(productRepository.findByName("AVAILABLE_NAME_DTO")).thenReturn(null);
+        when(productRepository.findByName(PRODUCT_VALUE_LESS_ZERO_AVAILABLE_NAME_DTO.getName())).thenReturn(null);
         when(productRepository.findByName(PRODUCT_VALUE_LESS_ZERO_DTO.getName())).thenReturn(PRODUCT_VALUE_LESS_ZERO);
 
         assertThrows(MinValueException.class, () -> productService.updateProduct(SAPIENS_BOOK_DTO.getId(), PRODUCT_VALUE_LESS_ZERO_AVAILABLE_NAME_DTO));
@@ -194,6 +236,9 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("DeleteProduct: IdProductExistingInDB > ReturnsVoid")
+    @Description("Tests if the deleteProduct() method of the product service correctly deletes a product " +
+    "when a valid product ID is provided.")
     void deleteProduct_With_IdProductExistingInDB_ReturnsVoid(){
         when(productRepository.findById(PRODUCT.getId())).thenReturn(Optional.of(PRODUCT));
 
@@ -206,6 +251,8 @@ class ProductServiceTests {
     }
 
     @Test
+    @DisplayName("DeleteProduct: IdProductUnexistingInDB > ThrowsProductNotFoundException")
+    @Description("Tests if the deleteProduct() method of the product service correctly throws a ProductNotFoundException when attempting to delete a product with an invalid product ID.")
     void deleteProduct_With_IdProductUnexistingInDB_ThrowsProductNotFoundException(){
         when(productRepository.findById("IncorrectId")).thenThrow(ProductNotFoundException.class);
 
