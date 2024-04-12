@@ -1,14 +1,12 @@
 package com.thiagomdo.ba.challenge.msorders.model.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class AddressClientViaCepRequest {
     private String street;
 

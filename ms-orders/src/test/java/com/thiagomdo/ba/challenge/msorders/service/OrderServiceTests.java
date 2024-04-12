@@ -227,6 +227,8 @@ class OrderServiceTests {
 
     @Test
     @DisplayName("Cancel: ValidData > ReturnsOrderDTO")
+    @Description("Tests if the cancel() method of the order service correctly cancels an order with valid data and returns the canceled order DTO. " +
+            "This test verifies that the service correctly saves the order with the 'CANCELED' status and returns the updated order DTO after cancellation.")
     void cancel_With_ValidData_ReturnsOrderDTO() {
         when(orderRepository.save(ORDER_RESPONSE_CANCELED)).thenReturn(ORDER_RESPONSE_CANCELED);
         when(orderRepository.findById(ORDER_RESPONSE_TO_CANCELED.getId())).thenReturn(Optional.of(ORDER_RESPONSE_TO_CANCELED));
@@ -241,8 +243,8 @@ class OrderServiceTests {
 
     @Test
     @DisplayName("Cancel: OrderStatusAlreadySENTorCANCELED > ThrowsNotPossibleToChangeStatusException")
-    @Description("Tests if the cancel() method of the order service correctly cancels an order with valid data and returns the canceled order DTO. " +
-    "This test verifies that the service correctly saves the order with the 'CANCELED' status and returns the updated order DTO after cancellation.")
+    @Description("Tests if the cancel() method of the order service correctly throws a NotPossibleToChangeDateException when attempting to cancel an order with status SENT or CANCELED. " +
+            "This test verifies that the service handles the case where cancellation is attempt to cancel an order that has been SENT or already CANCEL Status.")
     void cancel_With_OrderStatusAlreadySENTorCANCELED_ThrowsNotPossibleToChangeStatusException() {
         when(orderRepository.findById(ORDER_RESPONSE_SENT.getId())).thenReturn(Optional.of(ORDER_RESPONSE_SENT));
         when(orderRepository.findById(ORDER_RESPONSE_CANCELED.getId())).thenReturn(Optional.of(ORDER_RESPONSE_CANCELED));

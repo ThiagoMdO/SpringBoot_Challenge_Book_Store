@@ -5,10 +5,7 @@ import com.thiagomdo.ba.challenge.msorders.enuns.Payment_method;
 import com.thiagomdo.ba.challenge.msorders.enuns.Status;
 import com.thiagomdo.ba.challenge.msorders.model.dto.OrderDTO;
 import com.thiagomdo.ba.challenge.msorders.model.dto.ProductDTO;
-import com.thiagomdo.ba.challenge.msorders.model.request.AddressClientViaCepRequest;
-import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequest;
-import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestActualization;
-import com.thiagomdo.ba.challenge.msorders.model.request.ProductRequest;
+import com.thiagomdo.ba.challenge.msorders.model.request.*;
 import com.thiagomdo.ba.challenge.msorders.model.response.AddressClientViaCepResponse;
 import com.thiagomdo.ba.challenge.msorders.model.response.OrderResponse;
 
@@ -180,4 +177,6 @@ public class OrdersConstants {
 
     public static final OrderDTO ORDER_RESPONSE_CANCELED_DTO = new OrderDTO(ORDER_RESPONSE_CANCELED);
     public static final OrderDTO ORDER_RESPONSE_SENT_DTO = new OrderDTO(ORDER_RESPONSE_SENT);
+
+    public static final OrderRequestCancel ORDER_REQUEST_CANCEL = new OrderRequestCancel("Cancel Reason");
 }
