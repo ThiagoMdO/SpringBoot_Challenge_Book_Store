@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thiagomdo.ba.challenge.msproducts.resources.ProductResource;
 import com.thiagomdo.ba.challenge.msproducts.services.ProductService;
 import com.thiagomdo.ba.challenge.msproducts.services.exception.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -31,7 +32,9 @@ class ProductResourceTests {
     private ProductService productService;
 
     @Test
-    @Description("Tests if the GET endpoint '/products' returns a list of products with valid data, verifying that it returns status code 200 (OK).")
+    @DisplayName("FindAllProducts: ValidData > ReturnsProductList :: Status200")
+    @Description("Tests if the GET endpoint '/products' returns a list of products with valid data, " +
+            "verifying that it returns status code 200 (OK).")
     void findAllProducts_With_ValidData_ReturnsProductList_Status200() throws Exception {
 
         when(productService.findAll()).thenReturn(PRODUCT_DTO_LIST);
@@ -51,6 +54,9 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("FindAllProducts: ReturnsNoProduct > ThrowsEmptyListException :: Status200")
+    @Description("Tests if the GET endpoint '/products' throws EmptyListException when there are no products, " +
+            "verifying that it returns status code 200 (OK).")
     void findAllProducts_ReturnsNoProduct_ThrowsEmptyListException_Status200() throws Exception{
         when(productService.findAll()).thenThrow(new EmptyListException());
 
@@ -60,6 +66,9 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("FindProductById: ValidData > ReturnsProductDTO :: Status200")
+    @Description("Tests if the GET endpoint '/products/{id}' returns a product DTO with valid data when a valid ID is provided, " +
+            "verifying that it returns status code 200 (OK).")
     void findProductById_With_ValidData_ReturnsProductDTO_Status200() throws Exception{
         when(productService.findById("asdaf2")).thenReturn(PRODUCT_DTO);
 
@@ -68,10 +77,12 @@ class ProductResourceTests {
                 get("/products/asdaf2"))
                     .andExpect(status().isOk())
                     .andExpect(content().json(objectMapper.writeValueAsString(PRODUCT_DTO)));
-
     }
 
     @Test
+    @DisplayName("FindProductById: ByUnexistingId > ThrowsProductNotFoundException :: Status404")
+    @Description("Tests if the GET endpoint '/products/{id}' throws ProductNotFoundException when an invalid ID is provided, " +
+            "verifying that it returns status code 404 (Not Found).")
     void findProductById_ByUnexistingId_ThrowsProductNotFoundException_Status404() throws Exception{
         when(productService.findById("IncorrectIdProduct")).thenThrow(ProductNotFoundException.class);
 
@@ -80,6 +91,9 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("CreateProduct: ValidData > ReturnsProductDTO :: Status201")
+    @Description("Tests if the POST endpoint '/products' creates a product with valid data and returns the created product DTO, " +
+            "verifying that it returns status code 201 (Created).")
     void createProduct_With_ValidData_ReturnsProductDTO_Status201() throws Exception{
         when(productService.createProduct(PRODUCT_DTO)).thenReturn(PRODUCT_DTO);
 
@@ -90,6 +104,10 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("CreateProduct: NameAlreadyExist > ThrowsProductAlreadyExistException :: Status409")
+    @Description("Tests if the POST endpoint '/products' throws ProductAlreadyExistException " +
+            "when attempting to create a product with a name that already exists, " +
+            "verifying that it returns status code 409 (Conflict).")
     void createProduct_With_NameAlreadyExist_ThrowsProductAlreadyExistException_Status409() throws Exception{
         when(productService.createProduct(PRODUCT_DTO)).thenThrow(ProductAlreadyExistException.class);
 
@@ -100,6 +118,10 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("CreateProduct: DescriptionLengthLessThanTen > ThrowsMinDescriptionException :: Status400")
+    @Description("Tests if the POST endpoint '/products' throws MinDescriptionException " +
+            "when attempting to create a product with a description length less than ten characters, " +
+            "verifying that it returns status code 400 (Bad Request).")
     void createProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException_Status400() throws Exception{
         when(productService.createProduct(PRODUCT_DESCRIPTION_LESS_TEEN_DTO)).thenThrow(MinDescriptionException.class);
 
@@ -108,7 +130,12 @@ class ProductResourceTests {
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
     }
+
     @Test
+    @DisplayName("CreateProduct: ValueLessThanZero > ThrowsMinValueException :: Status400")
+    @Description("Tests if the POST endpoint '/products' throws MinValueException " +
+            "when attempting to create a product with a value less than zero, " +
+            "verifying that it returns status code 400 (Bad Request).")
     void createProduct_With_ValueLessThanZero_ThrowsMinValueException_Status400() throws Exception{
         when(productService.createProduct(PRODUCT_VALUE_LESS_ZERO_DTO)).thenThrow(MinValueException.class);
 
@@ -119,6 +146,9 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("UpdateProduct: ValidData > ReturnsProductDTO :: Status200")
+    @Description("Tests if the PUT endpoint '/products/{id}' updates a product with valid data and returns the updated product DTO, " +
+            "verifying that it returns status code 200 (OK).")
     void updateProduct_With_ValidData_ReturnsProductDTO_Status200() throws Exception{
         when(productService.updateProduct(PRODUCT.getId(), PRODUCT_DTO)).thenReturn(PRODUCT_DTO);
 
@@ -129,6 +159,10 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("UpdateProduct: IdProductNotFound > ThrowsProductNotFoundException :: Status404")
+    @Description("Tests if the PUT endpoint '/products/{id}' throws ProductNotFoundException " +
+            "when attempting to update a product with an invalid ID, " +
+            "verifying that it returns status code 404 (Not Found).")
     void updateProduct_With_IdProductNotFound_ThrowsProductNotFoundException_Status404() throws Exception{
         when(productService.updateProduct("IncorrectIdProduct", PRODUCT_DTO)).thenThrow(ProductNotFoundException.class);
 
@@ -139,6 +173,10 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("UpdateProduct: NameIsUsingForAnotherProduct > ThrowsProductAlreadyExistException :: Status409")
+    @Description("Tests if the PUT endpoint '/products/{id}' throws ProductAlreadyExistException " +
+            "when attempting to update a product with a name that is already being used by another product, " +
+            "verifying that it returns status code 409 (Conflict).")
     void updateProduct_With_NameIsUsingForAnotherProduct_ThrowsProductAlreadyExistException_Status409() throws Exception{
         when(productService.updateProduct("dasfx3", PRODUCT_DTO)).thenThrow(ProductAlreadyExistException.class);
 
@@ -149,6 +187,10 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("UpdateProduct: DescriptionLengthLessThanTen > ThrowsMinDescriptionException :: Status400")
+    @Description("Tests if the PUT endpoint '/products/{id}' throws MinDescriptionException " +
+            "when attempting to update a product with a description length less than ten characters, " +
+            "verifying that it returns status code 400 (Bad Request).")
     void updateProduct_With_DescriptionLengthLessThanTen_ThrowsMinDescriptionException_Status400() throws Exception{
         when(productService.updateProduct("dasfx3", PRODUCT_DESCRIPTION_LESS_TEEN_DTO)).thenThrow(MinDescriptionException.class);
 
@@ -159,6 +201,10 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("UpdateProduct: ValueIsNull > ThrowsMinDescriptionException :: Status400")
+    @Description("Tests if the PUT endpoint '/products/{id}' throws MinValueException " +
+            "when attempting to update a product with a null value, " +
+            "verifying that it returns status code 400 (Bad Request).")
     void updateProduct_With_ValueIsNull_ThrowsMinDescriptionException_Status400() throws Exception{
         when(productService.updateProduct("dasfx3", PRODUCT_VALUE_IS_NULL_DTO)).thenThrow(MinValueException.class);
 
@@ -169,7 +215,11 @@ class ProductResourceTests {
     }
 
     @Test
-    void updateProduct_With_ValueLessThanZero_ThrowsMinValueException() throws Exception{
+    @DisplayName("UpdateProduct: ValueLessThanZero > ThrowsMinValueException :: Status400")
+    @Description("Tests if the PUT endpoint '/products/{id}' throws MinValueException " +
+            "when attempting to update a product with a value less than zero, " +
+            "verifying that it returns status code 400 (Bad Request).")
+    void updateProduct_With_ValueLessThanZero_ThrowsMinValueException_Status400() throws Exception{
         when(productService.updateProduct("dasfx3", PRODUCT_VALUE_LESS_ZERO_DTO)).thenThrow(MinValueException.class);
 
         mockMvc.perform(put("/products/dasfx3")
@@ -179,6 +229,8 @@ class ProductResourceTests {
     }
 
     @Test
+    @DisplayName("DeleteProductById: IdProductExistingInDB > ReturnsVoid :: Status204")
+    @Description("Tests if the DELETE endpoint '/products/{id}' deletes a product with a valid ID and returns status code 204 (No Content).")
     void deleteProductById_With_IdProductExistingInDB_ReturnsVoid_Status204() throws Exception{
         String productId = "dasfx3";
 
@@ -189,7 +241,11 @@ class ProductResourceTests {
     }
 
     @Test
-    void deleteProductById_With_IdProductUnexistingInDB_ThrowsProductNotFoundException() throws Exception{
+    @DisplayName("DeleteProductById: IdProductUnexistingInDB > ThrowsProductNotFoundException :: Status404")
+    @Description("Tests if the DELETE endpoint '/products/{id}' throws ProductNotFoundException " +
+            "when attempting to delete a product with an invalid ID, " +
+            "verifying that it returns status code 404 (Not Found).")
+    void deleteProductById_With_IdProductUnexistingInDB_ThrowsProductNotFoundException_Status404() throws Exception{
         doThrow(ProductNotFoundException.class).when(productService).deleteProduct("InvalidId");
 
         mockMvc.perform(delete("/products/InvalidId"))
