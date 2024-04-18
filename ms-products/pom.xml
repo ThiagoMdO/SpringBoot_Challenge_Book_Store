@@ -121,7 +121,7 @@
 						</goals>
 						<configuration>
 							<inputSpec>
-								${project.basedir}/src/main/resources/openapi.yaml
+								${project.basedir}/src/main/resources/swagger.yaml
 							</inputSpec>
 							<generatorName>spring</generatorName>
 							<apiPackage>com.devertelo.springswaggercodegen3.api</apiPackage>
@@ -134,7 +134,7 @@
 								<delegatePattern>true</delegatePattern>
 								<interfaceOnly>true</interfaceOnly>
 								<useJakartaEe>true</useJakartaEe>
-								<!--								<useSpringBoot3>true</useSpringBoot3>-->
+																<useSpringBoot3>true</useSpringBoot3>
 							</configOptions>
 						</configuration>
 					</execution>

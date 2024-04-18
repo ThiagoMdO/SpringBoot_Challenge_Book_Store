@@ -1,0 +1,246 @@
+openapi: 3.0.3
+info:
+  title: Product service api
+  description: |
+    - [Product api allows the user to manipulate product data, searching by id, returning all registered products, modifying, deleting or creating new products.]
+  version: '2.0'
+
+servers:
+  - url: "http://localhost:8080"
+    description: Generated Product server url
+
+paths:
+  /products:
+    get:
+      tags:
+        - products
+      summary: Returns all of products.
+      description: Return a list of all available products.
+      operationId: findAllProducts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDTO'
+    post:
+      tags:
+        - /products
+      summary: Create product
+      description: It's possible to create a new product with different name.
+      operationId: createProduct
+      requestBody:
+        required: true
+        description: Created Product Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequestCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductRequestCreate'
+  /products/{id}:
+    get:
+      tags:
+        - /products/{id}
+      summary: Returns a Product by Id
+      description: Returns a specific Product by Id.
+      operationId: findProductById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Id Product to search.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+    put:
+      tags:
+        - /products/{id}
+      summary: Update Product
+      description: Update a Product by Id.
+      operationId: updateProduct
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Id Product to search.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Update Product Request
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductRequestUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+    delete:
+      tags:
+        - /products/{id}
+      summary: Delete Product
+      description: Delete a Product by Id.
+      operationId: deleteProductById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Id Product to delete in Data Base.
+          schema:
+            type: string
+
+      responses:
+        '204':
+          description: No Content
+
+components:
+  schemas:
+    ProductDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6616929eb63057298df31490
+          description: Id Product.
+        name:
+          type: string
+          example: The lord of the Rings
+          description: Name Product.
+        description:
+          type: string
+          example: The Lord of the Rings is an epic[1] high fantasy novel[a] by the English author and scholar J. R. R. Tolkien.
+          description: Description Product.
+          minLength: 10
+        value:
+          type: number
+          example: 49.99
+          format: double
+          description: Price Product.
+    ProductRequestCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: The lord of the Rings
+          description: Name Product.
+        description:
+          type: string
+          example: The Lord of the Rings is an epic[1] high fantasy novel[a] by the English author and scholar J. R. R. Tolkien.
+          description: Description Product.
+        value:
+          type: number
+          example: 49.99
+          format: double
+          description: Price Product.
+    ProductRequestUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Red Notice
+          description: Name Product.
+        description:
+          type: string
+          example: Freezing Order, the follow-up to Red Notice, is available now! "[Red Notice] does for investing in Russia.
+          description: Description Product.
+        value:
+          type: number
+          example: 59.99
+          format: double
+          description: Price Product.
+
+    NotFoundException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 404
+        status:
+          type: string
+          example: NOT_FOUND
+        message:
+          type: string
+          example: Data not found
+    EmptyListException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        status:
+          type: string
+          example: EMPTY_LIST
+        message:
+          type: string
+          example: The list is empty
+    MinDescriptionException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 400
+        status:
+          type: string
+          example: MIM_SIZE_DESCRIPTION
+        message:
+          type: string
+          example: The field must have at least 10 characters
+    MinValueException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 400
+        status:
+          type: string
+          example: MIM_VALUE_PERMITTED
+        message:
+          type: string
+          example: It's not possible a negative value
+    ProductAlreadyExistException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 409
+        status:
+          type: string
+          example: CONFLICT
+        message:
+          type: string
+          example: Conflict between the fields
+    SERVICE_UNAVAILABLE:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 500
+        status:
+          type: string
+          example: SERVICE_UNAVAILABLE
+        message:
+          type: string
+          example: Service Unavailable
