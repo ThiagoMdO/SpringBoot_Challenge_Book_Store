@@ -46,8 +46,8 @@ public class HandlerException {
 
     @ExceptionHandler(FeignException.class)
     public final ResponseEntity<Object> handlerFeignException(FeignException e){
-        var problem = new Problem(ErrorCode.ERROR_WHEN_SEARCHING_FOR_FEIGN, HttpStatus.SERVICE_UNAVAILABLE);
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(problem);
+        var problem = new Problem(ErrorCode.ERROR_WHEN_SEARCHING_FOR_FEIGN, HttpStatus.UNPROCESSABLE_ENTITY);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(problem);
     }
 
     @ExceptionHandler(Exception.class)

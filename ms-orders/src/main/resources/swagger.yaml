@@ -1,0 +1,585 @@
+openapi: 3.0.3
+info:
+  title: Order service API
+  description: |
+    The Orders API allows users to manipulate order data, searching by ID, returning all registered orders, modifying, deleting, or creating new orders.
+  version: 1.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/thiago_catureba/Orders/1.0.0
+  - url: "http://localhost:8081"
+    description: Generated Order server URL
+paths:
+  /orders:
+    get:
+      tags:
+        - /orders
+      summary: Return all orders.
+      description: Returns a list of all available orders.
+      operationId: getAllOrders
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDTO1'
+        '200x':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyListException'
+        '500':
+          description: SERVICE UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
+    post:
+      tags:
+        - Orders
+      summary: Create order.
+      description: It's possible to create a new order.
+      operationId: createOrder
+      requestBody:
+        required: true
+        description: Create Order Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderDTORequest1'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderDTO1'
+        '400':
+          description: AddressIncorrectException
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressIncorrectException'
+
+        '404':
+          description: ProductNotFoundException
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductNotFoundException'
+        '500':
+          description: SERVICE UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
+        '503':
+          description: ERROR WHEN SEARCHING FOR FEIGN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ERROR_WHEN_SEARCHING_FOR_FEIGN'
+
+  /orders/{id}:
+    get:
+      tags:
+        - Orders by Id
+      summary: Return order by Id.
+      description: Returns a specific order by Id.
+      operationId: getOrderById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Id Order to search.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDTO1'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderNotFoundException'
+    put:
+      tags:
+        - Orders by Id
+      summary: Update a order.
+      description: Returns a specific order by Id.
+      operationId: updateOrder
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Id Order to search.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Create Order Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequestActualization'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDTO1'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderNotFoundException'
+        '400':
+          description: AddressIncorrectException
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressIncorrectException'
+
+        'x-400':
+          description: ProductNotFoundException
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductNotFoundException'
+        'x-400x':
+          description: NotPossibleToChangeStatusException (If the order is SENT or already CANCELED, it is not possible to change the Status).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotPossibleToChangeStatusException'
+
+        '500':
+          description: SERVICE UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
+    post:
+      tags:
+        - Orders by Id
+      summary: Cancel a Order.
+      description: Cancel Order a specific order by Id.
+      operationId: canceledOrder
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Id Order to search.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDTOCanceled'
+        '400':
+          description: NotPossibleToChangeStatusException (If the order is SENT or already CANCELED, it is not possible to change the Status).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotPossibleToChangeStatusException'
+        'x-400':
+          description: NotPossibleToChangeDateException (where cancellation is attempted on an order placed more than 90 days ago).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotPossibleToChangeDateException'
+
+        '500':
+          description: SERVICE UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
+components:
+  schemas:
+    OrderDTO1:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6605903e1e2d5c55c2017222
+          description: Order ID.
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDTO1'
+          description: List of products in the order.
+        address:
+          $ref: '#/components/schemas/AddressClientViaCepResponse'
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        subtotalValue:
+          type: number
+          format: double
+          example: 1000.0
+          description: Subtotal value of the order.
+        discount:
+          type: number
+          format: double
+          example: 50.0
+          description: Discount applied.
+        totalValue:
+          type: number
+          format: double
+          example: 950.0
+          description: Total value of the order.
+        createdDate:
+          type: string
+          format: date
+          description: Order creation date.
+        status:
+          $ref: '#/components/schemas/Status'
+        cancelReason:
+          type: string
+          example: null
+          description: Reason for order cancellation.
+        cancelDate:
+          type: string
+          format: date
+          example: null
+          description: Order cancellation date.
+    OrderDTO2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6605903e1e2d5c55c2017223
+          description: Order ID.
+        products:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/ProductDTO2'
+          description: List of products in the order.
+        address:
+          $ref: '#/components/schemas/AddressClientViaCepResponse'
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        subtotalValue:
+          type: number
+          format: double
+          example: 500.0
+          description: Subtotal value of the order.
+        discount:
+          type: number
+          format: double
+          example: 25.0
+          description: Discount applied.
+        totalValue:
+          type: number
+          format: double
+          example: 475.0
+          description: Total value of the order.
+        createdDate:
+          type: string
+          format: date
+          description: Order creation date.
+        status:
+          $ref: '#/components/schemas/Status'
+        cancelReason:
+          type: string
+          example: null
+          description: Reason for order cancellation.
+        cancelDate:
+          type: string
+          format: date
+          example: null
+          description: Order cancellation date.
+
+    OrderDTOCanceled:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6605903e1e2d5c55c2017223
+          description: Order ID.
+        products:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/ProductDTO1'
+          description: List of products in the order.
+        address:
+          $ref: '#/components/schemas/AddressClientViaCepResponse'
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        subtotalValue:
+          type: number
+          format: double
+          example: 1000.0
+          description: Subtotal value of the order.
+        discount:
+          type: number
+          format: double
+          example: 50.0
+          description: Discount applied.
+        totalValue:
+          type: number
+          format: double
+          example: 950.0
+          description: Total value of the order.
+        createdDate:
+          type: string
+          format: date
+          description: Order creation date.
+        status:
+          type: string
+          example: CANCELED
+          description: Order status.
+        cancelReason:
+          type: string
+          example: I didn't like this book
+          description: Reason for order cancellation.
+        cancelDate:
+          type: string
+          format: date
+          description: Order cancellation date.
+
+    OrderDTORequest1:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDTO1'
+          description: products
+        address:
+          $ref: '#/components/schemas/AddressClientViaCepRequest'
+          description: Address
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+          description: Payment Method
+
+    OrderRequestActualization:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+              example: Street 1
+            number:
+              type: integer
+              example: 144
+            postalCode:
+              type: string
+              example: "01001000"
+
+    ProductDTO1:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6616929eb63057298df31490
+          description: Product ID.
+        quantity:
+          type: integer
+          example: 10
+          description: Quantity of the product.
+    ProductDTO2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6616929eb63057298df31491
+          description: Product ID.
+        quantity:
+          type: integer
+          example: 10
+          description: Quantity of the product.
+
+    AddressClientViaCepResponse:
+      type: object
+      properties:
+        street:
+          type: string
+          example: Street 1
+          description: Street address.
+        number:
+          type: integer
+          example: 144
+          description: Number address.
+        complement:
+          type: string
+          example: lado impar
+          description: Complement address.
+        city:
+          type: string
+          example: Sao Paulo
+          description: City address.
+        state:
+          type: string
+          example: SP
+          description: UF, State address.
+        postalCode:
+          type: string
+          example: 01001000
+          description: PostalCode address.
+
+    AddressClientViaCepRequest:
+      type: object
+      properties:
+        street:
+          type: string
+          example: Street 11
+          description: Street address
+        number:
+          type: integer
+          example: 144
+          description: Number address
+        postalCode:
+          type: string
+          example: "01001000"
+          description: Postal Code, CEP
+
+    PaymentMethod:
+      type: string
+      description: Payment Methods
+      enum: [PIX, CREDIT_CARD, BANK_TRANSFER, CRYPTOCURRENCY, GIFT_CARD, OTHER]
+
+    Status:
+      type: string
+      description: Order Status
+      enum: [CONFIRMED, SENT, CANCELED]
+
+    EmptyListException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        status:
+          type: string
+          example: EMPTY_LIST
+        message:
+          type: string
+          example: The list is empty
+
+    AddressIncorrectException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 400
+        status:
+          type: string
+          example: ADDRESS_INCORRECT
+        message:
+          type: string
+          example: Incorrect format or data, check fields address
+
+    OrderNotFoundException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 404
+        status:
+          type: string
+          example: NOT_FOUND
+        message:
+          type: string
+          example: Data not found
+
+    ProductNotFoundException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 404
+        status:
+          type: string
+          example: PRODUCT_NOT_FOUND
+        message:
+          type: string
+          example: Id product is incorrect
+
+    NotPossibleToChangeStatusException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 400
+        status:
+          type: string
+          example: NOT_POSSIBLE_CHANGE_STATUS
+        message:
+          type: string
+          example: It's not possible to change the Status Order
+
+    NotPossibleToChangeDateException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 400
+        status:
+          type: string
+          example: NOT_POSSIBLE_CHANGE_DATE
+        message:
+          type: string
+          example: It's not possible to change the order, because it has been at last 90 days since the order was issued
+
+    ERROR_WHEN_SEARCHING_FOR_FEIGN:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 503
+        status:
+          type: string
+          example: ERROR_WHEN_SEARCHING_FOR_FEIGN
+        message:
+          type: string
+          example: Error in searching, connection with FEIGN doesn't exist
+
+    SERVICE_UNAVAILABLE:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 500
+        status:
+          type: string
+          example: SERVICE_UNAVAILABLE
+        message:
+          type: string
+          example: Service Unavailable

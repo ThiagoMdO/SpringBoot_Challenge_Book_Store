@@ -70,6 +70,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.openapitools</groupId>
 			<artifactId>jackson-databind-nullable</artifactId>
 			<version>0.2.6</version>
@@ -146,7 +152,7 @@
 						</goals>
 						<configuration>
 							<inputSpec>
-								${project.basedir}/src/main/resources/openapi.yaml
+								${project.basedir}/src/main/resources/swagger.yaml
 							</inputSpec>
 							<generatorName>spring</generatorName>
 							<apiPackage>com.devertelo.springswaggercodegen3.api</apiPackage>
@@ -158,8 +164,8 @@
 								<sourceFolder>src/main/java/</sourceFolder>
 								<delegatePattern>true</delegatePattern>
 								<interfaceOnly>true</interfaceOnly>
-								<useJakartaEe>true</useJakartaEe>
-								<!--								<useSpringBoot3>true</useSpringBoot3>-->
+<!--								<useJakartaEe>true</useJakartaEe>-->
+								<useSpringBoot3>true</useSpringBoot3>
 							</configOptions>
 						</configuration>
 					</execution>

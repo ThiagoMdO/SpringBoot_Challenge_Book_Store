@@ -22,7 +22,7 @@ public enum ErrorCode {
 
     EMPTY_LIST("The list is empty"),
 
-    ERROR_WHEN_SEARCHING_FOR_FEIGN("Error in searching, connection with :FEIGN: doesn't exist");
+    ERROR_WHEN_SEARCHING_FOR_FEIGN("Error semantic, use data valid, Error in searching with Feign");
 
     private final String message;
 }

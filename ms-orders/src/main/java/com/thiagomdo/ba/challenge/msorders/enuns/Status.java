@@ -7,5 +7,5 @@ public enum Status {
 
     CONFIRMED,
     SENT,
-    CANCELED;
+    CANCELED
 }

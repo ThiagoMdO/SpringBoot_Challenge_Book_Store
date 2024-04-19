@@ -9,5 +9,5 @@ public enum Payment_method {
     CRYPTOCURRENCY,
     GIFT_CARD,
     PIX,
-    OTHER;
+    OTHER
 }

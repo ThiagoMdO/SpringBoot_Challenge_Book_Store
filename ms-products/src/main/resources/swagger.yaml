@@ -13,7 +13,7 @@ paths:
   /products:
     get:
       tags:
-        - products
+        - /products
       summary: Returns all of products.
       description: Return a list of all available products.
       operationId: findAllProducts
@@ -48,7 +48,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductRequestCreate'
-  /products/{id}:
+  /products/id:
     get:
       tags:
         - /products/{id}

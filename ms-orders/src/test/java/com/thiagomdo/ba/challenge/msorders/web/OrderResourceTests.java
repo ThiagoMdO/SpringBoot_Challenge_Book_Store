@@ -1,8 +1,6 @@
 package com.thiagomdo.ba.challenge.msorders.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequest;
-import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestActualization;
 import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestCancel;
 import com.thiagomdo.ba.challenge.msorders.resources.OrderResource;
 import com.thiagomdo.ba.challenge.msorders.service.OrderService;
@@ -18,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.thiagomdo.ba.challenge.msorders.common.OrdersConstants.*;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -104,7 +101,7 @@ class OrderResourceTests {
     }
 
     @Test
-    @DisplayName("CreateOrder: InvalidFieldsAddress > ThrowsAddressIncorrectException :: Status201")
+    @DisplayName("CreateOrder: InvalidFieldsAddress > ThrowsAddressIncorrectException :: Status400")
     @Description("Tests if the POST endpoint '/orders' throws AddressIncorrectException when the provided order request contains invalid address fields, " +
     "and returns status code 400 (Bad Request). " +
     "This test verifies that the endpoint correctly handles the case when the provided order request contains invalid address fields, " +
