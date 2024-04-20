@@ -13,7 +13,7 @@ paths:
   /orders:
     get:
       tags:
-        - /orders
+        - Orders
       summary: Return all orders.
       description: Returns a list of all available orders.
       operationId: getAllOrders
