@@ -266,12 +266,12 @@ components:
           $ref: '#/components/schemas/Status'
         cancelReason:
           type: string
-          example: null
+          nullable: true
           description: Reason for order cancellation.
         cancelDate:
           type: string
           format: date
-          example: null
+          nullable: true
           description: Order cancellation date.
     OrderDTO2:
       type: object
@@ -402,10 +402,15 @@ components:
             postalCode:
               type: string
               example: "01001000"
+
     OrderToCancel:
-      type: string
-      example: "I didn't like this book"
-      description: "Motivation to cancel this order"
+      type: object
+      properties:
+        cancelReason:
+          type: string
+          example: "I didn't like this book"
+          description: "Motivation to cancel this order"
+
     ProductDTO1:
       type: object
       properties:

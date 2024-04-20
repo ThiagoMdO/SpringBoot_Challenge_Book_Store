@@ -142,7 +142,7 @@ public class OrderResource {
             @ApiResponse(responseCode = "500", description = "SERVICE UNAVAILABLE", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.SERVICEUNAVAILABLE.class))
             }),
-            @ApiResponse(responseCode = "503", description = "Feign Exception", content = {
+            @ApiResponse(responseCode = "422", description = "Feign Exception", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ERRORWHENSEARCHINGFORFEIGN.class)))
             })
     }
@@ -169,7 +169,7 @@ public class OrderResource {
         ),
         responses = {
                 @ApiResponse(responseCode = "200", description = "OK", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.OrderDTO1.class)))
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.OrderDTOCanceled.class)))
                 }),
                 @ApiResponse(responseCode = "400", description = "NotPossibleToChangeStatusException, if order was CANCELED or SENT Status", content = {
                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.NotPossibleToChangeDateException.class)))
@@ -186,7 +186,7 @@ public class OrderResource {
                 @ApiResponse(responseCode = "500", description = "SERVICE UNAVAILABLE", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.SERVICEUNAVAILABLE.class))
                 }),
-                @ApiResponse(responseCode = "503", description = "Feign Exception", content = {
+                @ApiResponse(responseCode = "422", description = "Feign Exception", content = {
                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ERRORWHENSEARCHINGFORFEIGN.class)))
                 })
         }
