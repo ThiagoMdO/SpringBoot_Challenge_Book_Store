@@ -146,7 +146,7 @@ class OrderResourceTests {
     }
 
     @Test
-    @DisplayName("UpdateOrder: InvalidCEP > ThrowsAddressIncorrectException :: Status400")
+    @DisplayName("UpdateOrder: Valid_Data > OrderDTO :: Status200")
     @Description("Tests if the PUT endpoint '/orders/{orderId}' updates an order with valid data and returns status code 200 (OK). " +
     "This test verifies that the endpoint correctly updates an order with the provided data, " +
     "returns the updated order DTO in the response body, and returns status code 200.")

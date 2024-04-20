@@ -95,7 +95,7 @@ public class OrderResource {
             @ApiResponse(responseCode = "500", description = "SERVICE UNAVAILABLE", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.SERVICEUNAVAILABLE.class))
             }),
-            @ApiResponse(responseCode = "503", description = "Feign Exception", content = {
+            @ApiResponse(responseCode = "422", description = "Feign Exception", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ERRORWHENSEARCHINGFORFEIGN.class)))
             })
         }
@@ -112,8 +112,8 @@ public class OrderResource {
 
     @Operation(
         operationId = "updateOrder",
-        summary = "update a orders.",
-        description = "updateOrder a specific order by Id.",
+        summary = "Update a order",
+        description = "Update Order a specific order by Id.",
         tags = { "Orders by Id" },
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Update Order Request",
@@ -126,22 +126,25 @@ public class OrderResource {
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.OrderDTO1.class)))
-        }),
+            }),
+            @ApiResponse(responseCode = "400", description = "NotPossibleToChangeStatusException, if order was CANCELED or SENT Status", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.NotPossibleToChangeDateException.class)))
+            }),
+            @ApiResponse(responseCode = "400x", description = "AddressIncorrectException", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.AddressIncorrectException.class)))
+            }),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.OrderNotFoundException.class))
-        }),
+            }),
             @ApiResponse(responseCode = "404x", description = "ProductNotFoundException", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ProductNotFoundException.class)))
-        }),
-            @ApiResponse(responseCode = "400", description = "AddressIncorrectException", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.AddressIncorrectException.class)))
-        }),
+            }),
             @ApiResponse(responseCode = "500", description = "SERVICE UNAVAILABLE", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.SERVICEUNAVAILABLE.class))
-        }),
+            }),
             @ApiResponse(responseCode = "503", description = "Feign Exception", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ERRORWHENSEARCHINGFORFEIGN.class)))
-        })
+            })
     }
     )
     @PutMapping("/{id}")
@@ -151,6 +154,43 @@ public class OrderResource {
         return ResponseEntity.ok().body(orderDTO);
     }
 
+    @Operation(
+        operationId = "canceledOrder",
+        summary = "Canceled a Order",
+        description = "To Cancel a specific order by Id.",
+        tags = { "Orders by Id" },
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                description = "Reason to cancel this Order Request",
+                required = true,
+                content = @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.OrderToCancel.class)
+                )
+        ),
+        responses = {
+                @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.OrderDTO1.class)))
+                }),
+                @ApiResponse(responseCode = "400", description = "NotPossibleToChangeStatusException, if order was CANCELED or SENT Status", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.NotPossibleToChangeDateException.class)))
+                }),
+                @ApiResponse(responseCode = "400x", description = "AddressIncorrectException", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.AddressIncorrectException.class)))
+                }),
+                @ApiResponse(responseCode = "404", description = "Not Found", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.OrderNotFoundException.class))
+                }),
+                @ApiResponse(responseCode = "404x", description = "ProductNotFoundException", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ProductNotFoundException.class)))
+                }),
+                @ApiResponse(responseCode = "500", description = "SERVICE UNAVAILABLE", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.SERVICEUNAVAILABLE.class))
+                }),
+                @ApiResponse(responseCode = "503", description = "Feign Exception", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ERRORWHENSEARCHINGFORFEIGN.class)))
+                })
+        }
+    )
     @PostMapping("/{id}")
     public ResponseEntity<OrderDTO> canceledOrder(@PathVariable String id, @RequestBody OrderRequestCancel requestCancel){
         OrderDTO orderDTO = orderService.cancel(id, requestCancel);

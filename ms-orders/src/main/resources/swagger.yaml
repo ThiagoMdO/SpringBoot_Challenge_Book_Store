@@ -402,7 +402,10 @@ components:
             postalCode:
               type: string
               example: "01001000"
-
+    OrderToCancel:
+      type: string
+      example: "I didn't like this book"
+      description: "Motivation to cancel this order"
     ProductDTO1:
       type: object
       properties:
@@ -563,7 +566,7 @@ components:
       properties:
         code:
           type: number
-          example: 503
+          example: 422
         status:
           type: string
           example: ERROR_WHEN_SEARCHING_FOR_FEIGN
