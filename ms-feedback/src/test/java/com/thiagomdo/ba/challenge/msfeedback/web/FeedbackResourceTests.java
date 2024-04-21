@@ -137,10 +137,10 @@ class FeedbackResourceTests {
     }
 
     @Test
-    @DisplayName("UpdateFeedBack: InvalidIdValid > ThrowsFeedBackNotFoundException :: Status400")
+    @DisplayName("UpdateFeedBack: InvalidIdValid > ThrowsFeedBackNotFoundException :: Status404")
     @Description("Tests if the PUT endpoint '/feedbacks/{id}' throws FeedbackNotFoundException when an invalid ID is provided, " +
     "verifying that it returns status code 404 (Not Found).")
-    void updateFeedBack_With_InvalidIdValid_ThrowsFeedBackNotFoundException_Status400() throws Exception{
+    void updateFeedBack_With_InvalidIdValid_ThrowsFeedBackNotFoundException_Status404() throws Exception{
         when(feedBackService.update("Id_Invalid", FEEDBACK_REQUEST01)).thenThrow(FeedbackNotFoundException.class);
 
         mockMvc.perform(put("/feedbacks/Id_Invalid")

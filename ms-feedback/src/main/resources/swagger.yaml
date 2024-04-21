@@ -1,0 +1,306 @@
+openapi: 3.0.3
+info:
+  title: Product service api
+  description: |
+    - [Feedback api allows the user to manipulate feedback data, searching by id, returning all registered feedback, modifying, deleting or creating new feedback.]
+  version: 1.0.1
+
+servers:
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/thiago_catureba/Feedback/1.0.1
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/thiago_catureba/Product/1.0.1
+  - url: "http://localhost:8082"
+    description: Generated Feedback server url
+
+paths:
+  /feedback:
+    get:
+      tags:
+        - Feedback
+      summary: Returns all of products.
+      description: Return a list of all available products.
+      operationId: findAllProducts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/FeedbackDTO1'
+                    - $ref: '#/components/schemas/FeedbackDTO2'
+        'x-200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmptyListException'
+        '500':
+          description: SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
+    post:
+      tags:
+        - Feedback
+      summary: Create a feedback.
+      description: Create a new feedback by order.
+      operationId: createFeedBack
+      requestBody:
+        required: true
+        description: Create feedback Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+      responses:
+        '201':
+          description: Creade
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackDTO1'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderNotFoundException'
+        '400':
+          description: NotPossibleToCommentOrderException
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotPossibleToCommentOrderException'
+        '500':
+          description: SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
+
+  /feedback/{id}:
+    get:
+      tags:
+        - Feedback by Id
+      summary: Return Feedback by Id.
+      description: Returns a specific Feedback by Id.
+      operationId: getFeedBackById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Id Feedback to search.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackDTO1'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackNotFoundException'
+    put:
+      tags:
+        - Feedback by Id
+      summary: Update a Feedback by Id.
+      description: Update a specific Feedback by Id.
+      operationId: updateFeedBack
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Id Feedback to search.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        description: Create feedback Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackDTO1'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackNotFoundException'
+
+        'x-404':
+          description: OrderNotFoundException
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderNotFoundException'
+
+        '400':
+          description: FeedbackNotFoundException
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackNotFoundException'
+
+    delete:
+      tags:
+        - Feedback by Id
+      summary: Update a Feedback by Id.
+      description: Update a specific Feedback by Id.
+      operationId: deleteFeedBack
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Id Feedback to search.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderNotFoundException'
+components:
+  schemas:
+    FeedbackDTO1:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6605903e1e2d5c55c2017111
+        scale:
+          $ref: '#/components/schemas/Scale'
+        comment:
+          type: string
+          example: Any comment dissatisfied
+          description: comment about the order
+        orderId:
+          type: string
+          example: 6605903e1e2d5c55c2017225
+
+    FeedbackDTO2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6605903e1e2d5c55c2017222
+        scale:
+          $ref: '#/components/schemas/Scale'
+        comment:
+          type: string
+          example: Secound comment dissatisfied
+          description: comment about the order
+        orderId:
+          type: string
+          example: 6605903e1e2d5c55c2017223
+
+    feedbackRequest:
+      type: object
+      properties:
+        scale:
+          $ref: '#/components/schemas/Scale'
+        comment:
+          type: string
+          example: Any comment dissatisfied
+          description: comment about the order
+        orderId:
+          type: string
+          example: 6605903e1e2d5c55c2017223
+
+    Scale:
+      type: string
+      description: scale satisfication
+      enum: [VERY_DISSATISFIED, DISSATISFIED, NEUTRAL, SATISFIED, VERY_SATISFIED]
+
+    EmptyListException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        status:
+          type: string
+          example: EMPTY_LIST
+        message:
+          type: string
+          example: The list is empty
+
+    OrderNotFoundException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 404
+        status:
+          type: string
+          example: ORDER_NOT_FOUND
+        message:
+          type: string
+          example: Id order is incorrect
+
+    NotPossibleToCommentOrderException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 400
+        status:
+          type: string
+          example: NOT_POSSIBLE_TO_COMMENT_ORDER
+        message:
+          type: string
+          example: Not Possible To Comment Order, because this orders is canceled
+
+    FeedbackNotFoundException:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 404
+        status:
+          type: string
+          example: NOT_FOUND
+        message:
+          type: string
+          example: Data not found
+
+    SERVICE_UNAVAILABLE:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 500
+        status:
+          type: string
+          example: SERVICE_UNAVAILABLE
+        message:
+          type: string
+          example: Service Unavailable
