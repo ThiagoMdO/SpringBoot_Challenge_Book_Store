@@ -222,7 +222,7 @@ components:
           type: string
           example: 6605903e1e2d5c55c2017223
 
-    feedbackRequest:
+    FeedbackRequest:
       type: object
       properties:
         scale:

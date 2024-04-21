@@ -131,19 +131,19 @@ public class FeedBackResource {
         ),
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                    @Content(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.FeedbackDTO1.class))
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.FeedbackDTO1.class))
             }),
             @ApiResponse(responseCode = "404" , description = "Not Found", content = {
-                    @Content(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.FeedbackNotFoundException.class))
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.FeedbackNotFoundException.class))
             }),
             @ApiResponse(responseCode = "x-404", description = "OrderNotFoundException", content = {
-                    @Content(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.OrderNotFoundException.class))
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.OrderNotFoundException.class))
             }),
             @ApiResponse(responseCode = "400", description = "FeedbackNotFoundException", content = {
-                    @Content(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.FeedbackNotFoundException.class))
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.FeedbackNotFoundException.class))
             }),
             @ApiResponse(responseCode = "500", description = "SERVICE_UNAVAILABLE", content = {
-                    @Content(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.SERVICEUNAVAILABLE.class))
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.SERVICEUNAVAILABLE.class))
             })
         }
     )
@@ -165,10 +165,10 @@ public class FeedBackResource {
         responses = {
             @ApiResponse(responseCode = "204", description = "No Content"),
             @ApiResponse(responseCode = "404" , description = "Not Found", content = {
-                @Content(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.FeedbackNotFoundException.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.FeedbackNotFoundException.class))
             }),
             @ApiResponse(responseCode = "500", description = "SERVICE_UNAVAILABLE", content = {
-                @Content(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.SERVICEUNAVAILABLE.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.SERVICEUNAVAILABLE.class))
             })
         }
     )

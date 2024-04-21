@@ -77,18 +77,20 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductNotFoundException'
+        '422':
+          description: Feign Exception
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ERROR_WHEN_SEARCHING_FOR_FEIGN'
         '500':
           description: SERVICE UNAVAILABLE
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
-        '503':
-          description: ERROR WHEN SEARCHING FOR FEIGN
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ERROR_WHEN_SEARCHING_FOR_FEIGN'
 
   /orders/{id}:
     get:
@@ -117,6 +119,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderNotFoundException'
+        '500':
+          description: SERVICE UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
     put:
       tags:
         - Orders by Id
@@ -144,30 +152,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderDTO1'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderNotFoundException'
         '400':
-          description: AddressIncorrectException
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AddressIncorrectException'
-
-        'x-400':
-          description: ProductNotFoundException
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProductNotFoundException'
-        'x-400x':
           description: NotPossibleToChangeStatusException (If the order is SENT or already CANCELED, it is not possible to change the Status).
           content:
             application/json:
@@ -175,6 +160,29 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/NotPossibleToChangeStatusException'
+
+        'x-400':
+          description: AddressIncorrectException
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressIncorrectException'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderNotFoundException'
+        '422':
+          description: Feign Exception
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ERROR_WHEN_SEARCHING_FOR_FEIGN'
 
         '500':
           description: SERVICE UNAVAILABLE
@@ -218,7 +226,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/NotPossibleToChangeDateException'
-
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderNotFoundException'
         '500':
           description: SERVICE UNAVAILABLE
           content:
@@ -331,8 +344,7 @@ components:
         products:
           type: array
           items:
-            oneOf:
-              - $ref: '#/components/schemas/ProductDTO1'
+           $ref: '#/components/schemas/ProductDTO1'
           description: List of products in the order.
         address:
           $ref: '#/components/schemas/AddressClientViaCepResponse'
