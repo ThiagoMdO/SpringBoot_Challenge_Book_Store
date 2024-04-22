@@ -26,6 +26,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductDTO'
+        'x-200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmptyListException'
+        '500':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
     post:
       tags:
         - /products
@@ -69,6 +85,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductDTO'
+        '404':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
     put:
       tags:
         - /products/{id}

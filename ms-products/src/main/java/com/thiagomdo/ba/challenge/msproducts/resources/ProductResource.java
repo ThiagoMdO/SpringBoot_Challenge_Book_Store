@@ -3,6 +3,7 @@ package com.thiagomdo.ba.challenge.msproducts.resources;
 import com.thiagomdo.ba.challenge.msproducts.model.dto.ProductDTO;
 import com.thiagomdo.ba.challenge.msproducts.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,12 +28,12 @@ public class ProductResource {
         operationId = "findAllProducts",
         summary = "Returns all of products.",
         description = "Return a list of all available products.",
-        tags = { "/products" },
+        tags = { "Products" },
         responses = {
         @ApiResponse(responseCode = "200", description = "OK", content = {
             @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ProductDTO.class)))
         }),
-        @ApiResponse(responseCode = " 200 ", description = "OK", content = {
+        @ApiResponse(responseCode = "x-200 ", description = "OK", content = {
             @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.EmptyListException.class)))
         }),
         @ApiResponse(responseCode = "500", description = "SERVICE_UNAVAILABLE", content = {
@@ -50,8 +51,11 @@ public class ProductResource {
     @Operation(
         operationId = "findProductById",
         summary = "Returns product by Id.",
-        description = "Return product in a Data Base.",
-        tags = { "/products/{id}" },
+        description = "Returns a specific Product by Id.",
+        tags = { "Products by Id" },
+        parameters = {
+          @Parameter(name = "id", description = "Search product by Id.", required = true, example = "6616929eb63057298df31490")
+        },
         responses = {
         @ApiResponse(responseCode = "200", description = "OK", content = {
             @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ProductDTO.class)))
@@ -73,7 +77,7 @@ public class ProductResource {
         operationId = "createProduct",
         summary = "Create Product",
         description = "Create a new Product with name different.",
-        tags = {"/products"},
+        tags = {"Products"},
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Create Product Request",
             required = true,
@@ -86,15 +90,15 @@ public class ProductResource {
             @ApiResponse(responseCode = "201", description = "Created", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ProductDTO.class)))
             }),
-            @ApiResponse(responseCode = "409", description = "Conflict", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ProductAlreadyExistException.class)))
-            }),
             @ApiResponse(responseCode = "400", description = "MinDescriptionException", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.MinDescriptionException.class)))
             }),
-            @ApiResponse(responseCode = " 400 ", description = "MinValueException", content = {
+            @ApiResponse(responseCode = "x-400", description = "MinValueException", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.MinValueException.class)))
             }),
+           @ApiResponse(responseCode = "409", description = "Conflict", content = {
+                   @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ProductAlreadyExistException.class)))
+           }),
             @ApiResponse(responseCode = "500", description = "SERVICE_UNAVAILABLE", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.SERVICEUNAVAILABLE.class)))
             })
