@@ -237,7 +237,7 @@ components:
 
     Scale:
       type: string
-      description: scale satisfication
+      description: scale satisfaction
       enum: [VERY_DISSATISFIED, DISSATISFIED, NEUTRAL, SATISFIED, VERY_SATISFIED]
 
     EmptyListException:

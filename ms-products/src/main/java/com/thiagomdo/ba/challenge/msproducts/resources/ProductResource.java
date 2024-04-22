@@ -118,14 +118,17 @@ public class ProductResource {
         operationId = "updateProduct",
         summary = "Update Product",
         description = "Update some specifics fields in a product",
-        tags = {"/products/{id}"},
+        tags = {"Products by Id"},
+        parameters = {
+            @Parameter(name = "id", description = "Search Product by Id", required = true, example = "6616929eb63057298df31490")
+        },
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Create Product Request",
             required = true,
             content = @Content(
-            mediaType = "application/json",
-            schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ProductRequestCreate.class)
-        )
+                mediaType = "application/json",
+                schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ProductRequestCreate.class)
+            )
         ),
         responses = {
             @ApiResponse(responseCode = "200", description = "Updated", content = {
@@ -137,7 +140,7 @@ public class ProductResource {
             @ApiResponse(responseCode = "400", description = "MinDescriptionException", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.MinDescriptionException.class)))
             }),
-            @ApiResponse(responseCode = " 400 ", description = "MinValueException", content = {
+            @ApiResponse(responseCode = "x-400", description = "MinValueException", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.MinValueException.class)))
             }),
             @ApiResponse(responseCode = "404", description = "NotFoundException", content = {
@@ -159,7 +162,10 @@ public class ProductResource {
         operationId = "deleteProductById",
         summary = "Delete Product",
         description = "Delete a product by Id",
-        tags = {"/products/{id}"},
+        tags = {"Products by Id"},
+        parameters = {
+            @Parameter(name = "id", description = "Search Product by Id", required = true, example = "6616929eb63057298df31490")
+        },
         responses = {
             @ApiResponse(responseCode = "204", description = "Deleted"),
             @ApiResponse(responseCode = "404", description = "NotFoundException", content = {

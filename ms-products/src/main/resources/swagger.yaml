@@ -64,6 +64,38 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductRequestCreate'
+        '400':
+          description: MinDescriptionException
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MinDescriptionException'
+        'x-400':
+          description: MinValueException
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MinValueException'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductAlreadyExistException'
+        '500':
+          description: SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
   /products/id:
     get:
       tags:
@@ -86,11 +118,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductDTO'
         '404':
-          description: OK
+          description: NotFoundException
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFoundException'
+        '500':
+          description: SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
     put:
       tags:
         - /products/{id}
@@ -120,6 +160,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductDTO'
+        '400':
+          description: MinDescriptionException
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MinDescriptionException'
+        'x-400':
+          description: MinValueException
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MinValueException'
+        '404':
+          description: NotFoundException
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundException'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductAlreadyExistException'
+        '500':
+          description: SERVICE_UNAVAILABLE
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SERVICE_UNAVAILABLE'
     delete:
       tags:
         - /products/{id}
