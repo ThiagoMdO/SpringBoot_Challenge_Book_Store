@@ -13,12 +13,12 @@ The product API allows you to register, display, edit and delete books following
     • The value of the product must be a positive number.
 
 
-## 📚 Documentações
+## 📚 Documentations
 
 - [Documentação Geral](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store)
-- >[Documentação Product](https://github.dev/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-products)
-- [Documentação Order](https://github.com/)
-- [Documentação Feedback](https://github.com/)
+- >[Documentação Product](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-products)
+- [Documentação Order](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-orders)
+- [Documentação Feedback](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-feedback)
 
 
 <br/>
