@@ -63,13 +63,13 @@
     <img align="center" alt="spring" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" />
     <img align="center" alt="Mongo DB" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" /> 
     <img align="center" alt="PostMan" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg" />
-    <img align="center" alt="JUnit" height="30" width="55" border-radius = "20px" src="https://miro.medium.com/v2/resize:fit:1024/1*ZJCyw-j-0_IqbgvYdNZ6tw.jpeg"/>
+    <img align="center" alt="JUnit5" height="30" width="30" src="https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/assets/128644651/9b1a8dc4-f562-4474-8fa0-d19627efe0e7"/>
     <img align="center" alt="Mockito" height="30" width="55"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF5fhM2GwoPeFJAbuCcPFALX_aXaA_PBCDDRyFgLAyEA&s" style="border-radius: 20px"/>
     <img align="center" alt="Swagger" height="30" width="30"  src="https://static-00.iconduck.com/assets.00/swagger-icon-512x512-halz44im.png" style="border-radius: 20px"/>
 </div>
 <br/>
 
-## Autor 🧑🏼‍🎨
+## Author 🧑🏼‍🎨
 
 - [@ThiagoMdO](https://github.com/ThiagoMdO)
 
@@ -110,7 +110,7 @@
     #Feedbacks
     /http://localhost:8082/swagger-ui/index.html/
 ```
-## Autor 🧑🏼‍🎨
+## Author 🧑🏼‍🎨
 
 - [@ThiagoMdO](https://github.com/ThiagoMdO)
 
