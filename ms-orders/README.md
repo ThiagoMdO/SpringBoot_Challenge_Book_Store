@@ -17,9 +17,9 @@ The Order API allows you to register, display, edit and cancel orders following 
 ## 📚 Documentations
 
 - [Documentação Geral](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store)
-- [Documentação Product](https://github.dev/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-products)
-- >[Documentação Order](https://github.dev/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-orders)
-- [Documentação Feedback](https://github.dev/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-feedback)
+- [Documentação Product](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-products)
+- >[Documentação Order](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-orders)
+- [Documentação Feedback](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-feedback)
 
 
 <br/>
