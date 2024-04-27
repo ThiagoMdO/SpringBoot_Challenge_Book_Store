@@ -87,7 +87,7 @@
 
     2.3 . 8082  -> Microservice: Feedback
 
-    2.4 . 27017 -> MondoDB
+    2.4 . 27017 -> MongoDB
 
 3 . To use libraries and tools that support Jakarta EE, such as Swagger in version 3 and others, you may need to use at least JDK 17, which includes transitioning packages from javax.* to jakarta.*. However, JDK 17 is not strictly required for all dependencies and plugins.
 **It is recommended to use Java version 17 or higher**.
