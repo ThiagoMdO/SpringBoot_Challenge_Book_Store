@@ -15,10 +15,10 @@
 
 ## 📚 Documentations
 
-- [Documentação Geral](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store)
-- [Documentação Product](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-products)
-- [Documentação Order](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-orders)
-- >[Documentação Feedback](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-feedback)
+- [General Documentation](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store)
+- [Product Documentation](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-products)
+- [Order Documentation](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-orders)
+- >[Feedback Documentation](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-feedback)
 
 
 <br/>
