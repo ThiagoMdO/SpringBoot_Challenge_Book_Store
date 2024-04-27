@@ -1,6 +1,6 @@
 # SpringBoot_Challenge_Book_Store
 
-<h1 style="text-align: center; background-color: #000; border-radius: 10px">  
+<h1 align="center" style="text-align: center; background-color: #000; border-radius: 10px">  
     <img src = "https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/assets/128644651/e6beeb04-dc84-4d21-9645-ee86d08e8874" style="margin-top: 10px; height: 300px; width: 300px ">
     <p style="text-shadow : 1px 1px 10px orange">Book Store</p>
 </h1>
@@ -15,7 +15,7 @@
 
 #### *Product*
 
-```http
+```bash
   /products
     GET     -> Get all products
     POST    -> Create a new Book
@@ -27,7 +27,7 @@
 ```
 
 #### *Order*
-```http
+```bash
   /orders
     GET     -> Get all orders
     POST    -> Create a new Order
@@ -39,7 +39,7 @@
 ```
 #### *Feedback*
 
-```http
+```bash
   /feedbacks
     GET     -> Get all Feedbacks
     POST    -> Create a new Feedback
@@ -52,16 +52,16 @@
 
 <br/>
 
-## Tools
-
-<img align="center" alt="Java" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" />
-<img align="center" alt="spring" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" />
-<img align="center" alt="Mongo DB" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" /> 
-<img align="center" alt="PostMan" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg" />
-<img align="center" alt="JUnit" height="30" width="55"  src="https://miro.medium.com/v2/resize:fit:1024/1*ZJCyw-j-0_IqbgvYdNZ6tw.jpeg" style="border-radius: 20px"/>
-<img align="center" alt="Mockito" height="30" width="55"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF5fhM2GwoPeFJAbuCcPFALX_aXaA_PBCDDRyFgLAyEA&s" style="border-radius: 20px"/>
-<img align="center" alt="Swagger" height="30" width="30"  src="https://static-00.iconduck.com/assets.00/swagger-icon-512x512-halz44im.png" style="border-radius: 20px"/>
-
+## 🔨 Tools 
+<div display="inline">
+    <img align="center" alt="Java" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" />
+    <img align="center" alt="spring" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg" />
+    <img align="center" alt="Mongo DB" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" /> 
+    <img align="center" alt="PostMan" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg" />
+    <img align="center" alt="JUnit" height="30" width="55" border-radius = "20px" src="https://miro.medium.com/v2/resize:fit:1024/1*ZJCyw-j-0_IqbgvYdNZ6tw.jpeg"/>
+    <img align="center" alt="Mockito" height="30" width="55"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF5fhM2GwoPeFJAbuCcPFALX_aXaA_PBCDDRyFgLAyEA&s" style="border-radius: 20px"/>
+    <img align="center" alt="Swagger" height="30" width="30"  src="https://static-00.iconduck.com/assets.00/swagger-icon-512x512-halz44im.png" style="border-radius: 20px"/>
+</div>
 <br/>
 
 ## Autor 🧑🏼‍🎨
