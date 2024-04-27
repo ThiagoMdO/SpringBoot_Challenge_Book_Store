@@ -68,7 +68,7 @@ products:
 }
 ```
 
->>## Retorna todos os itens
+>>## Returns all items
 
 ```http
   GET /products
@@ -90,7 +90,7 @@ products:
 }
 ```
 
->>## Retorna um item
+>>## Returns a item
 
 ```http
   GET /products/{id}
@@ -100,7 +100,7 @@ products:
 | `id` | `string` | **Required** .Id product | 6616929eb63057298df31491
 
 
->>## Atualiza um item
+>>## Update a item
 
 ```http
   PUT /products/{id}
