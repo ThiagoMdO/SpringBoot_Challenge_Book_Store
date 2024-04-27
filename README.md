@@ -7,7 +7,12 @@
 
 > ### The application is responsible for part of a system capable of managing the control of book sales in a Book Store and it is possible to receive feedback where customers can choose their level of satisfaction and create or edit a comment on an order.
 >"
+## 📚 Documentations
 
+- >[General Documentation](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store)
+- [Product Documentation](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-products)
+- [Order Documentation](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-orders)
+- [Feedback Documentation](https://github.com/ThiagoMdO/SpringBoot_Challenge_Book_Store/tree/main/ms-feedback)
 
 ## General System Documentation
 
@@ -105,7 +110,6 @@
     #Feedbacks
     /http://localhost:8082/swagger-ui/index.html/
 ```
-
 ## Autor 🧑🏼‍🎨
 
 - [@ThiagoMdO](https://github.com/ThiagoMdO)
