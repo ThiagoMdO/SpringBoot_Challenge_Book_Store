@@ -7,7 +7,16 @@
 
 
 The Order API allows you to register, display, edit and cancel orders following the business rules that are:
+    
+    • To complete the information regarding the address, the data in the ViaCEP API must be consulted.
+    • Order status: CONFIRMED, SENT, CANCELED
+    • Allowed payment types: CREDIT_CARD, BANK TRANSFER, CRYPTOCURRENCY, GIFT CARD, PIX, OTHER.
+    • The total order value is calculated by the application according to the following formula: total_value = subtotal_value - discount
+    • The 5% discount is only applied to orders using the PIX payment method.
+    • For the address, only number, complement and postal_code must be provided.
+    • To complement the information regarding the address, you must consult the data in the ViaCEP API.
 
+    #Business rules for canceling orders
     • An order can only be canceled if the status is other than SENT.
     • An order cannot be canceled if it is more than 90 days old.
     • After cancellation, the order status must be changed to CANCELED.
