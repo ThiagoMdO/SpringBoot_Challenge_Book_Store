@@ -1,6 +1,6 @@
 package com.thiagomdo.ba.challenge.msorders.resources;
 
-import com.thiagomdo.ba.challenge.msorders.interfaces.OrderSwaggerController;
+import com.thiagomdo.ba.challenge.msorders.interfaces.OrderResource;
 import com.thiagomdo.ba.challenge.msorders.model.dto.OrderDTO;
 import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequest;
 import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestActualization;
@@ -16,23 +16,26 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
-public class OrderResource implements OrderSwaggerController {
+public class OrderResourceImpl implements OrderResource {
 
     @Autowired
     private OrderService orderService;
 
+    @Override
     @GetMapping
     public ResponseEntity<List<OrderDTO>> getAllOrders(){
         List<OrderDTO> list = orderService.getAll();
         return ResponseEntity.ok().body(list);
     }
 
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable String id){
         OrderDTO orderDTO = orderService.getById(id);
         return ResponseEntity.ok().body(orderDTO);
     }
 
+    @Override
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderRequest request){
         OrderDTO orderDTO = orderService.create(request);
@@ -43,6 +46,7 @@ public class OrderResource implements OrderSwaggerController {
         return ResponseEntity.created(uri).body(orderDTO);
     }
 
+    @Override
     @PutMapping("/{id}")
     public ResponseEntity<OrderDTO> updateOrder(@PathVariable String id, @RequestBody OrderRequestActualization actualization){
         OrderDTO orderDTO = orderService.update(id, actualization);
@@ -50,6 +54,7 @@ public class OrderResource implements OrderSwaggerController {
         return ResponseEntity.ok().body(orderDTO);
     }
 
+    @Override
     @PostMapping("/{id}")
     public ResponseEntity<OrderDTO> canceledOrder(@PathVariable String id, @RequestBody OrderRequestCancel requestCancel){
         OrderDTO orderDTO = orderService.cancel(id, requestCancel);

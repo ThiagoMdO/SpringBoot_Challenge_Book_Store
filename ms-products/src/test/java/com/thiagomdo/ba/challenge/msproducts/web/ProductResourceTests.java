@@ -1,7 +1,7 @@
 package com.thiagomdo.ba.challenge.msproducts.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thiagomdo.ba.challenge.msproducts.resources.ProductResource;
+import com.thiagomdo.ba.challenge.msproducts.resources.ProductResourceImpl;
 import com.thiagomdo.ba.challenge.msproducts.services.ProductService;
 import com.thiagomdo.ba.challenge.msproducts.services.exception.*;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ProductResource.class)
+@WebMvcTest(ProductResourceImpl.class)
 class ProductResourceTests {
 
     @Autowired

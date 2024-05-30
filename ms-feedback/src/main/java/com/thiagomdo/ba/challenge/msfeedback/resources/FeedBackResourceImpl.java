@@ -1,6 +1,6 @@
 package com.thiagomdo.ba.challenge.msfeedback.resources;
 
-import com.thiagomdo.ba.challenge.msfeedback.interfaces.FeedbackSwaggerController;
+import com.thiagomdo.ba.challenge.msfeedback.interfaces.FeedbackResource;
 import com.thiagomdo.ba.challenge.msfeedback.model.dto.FeedbackDTO;
 import com.thiagomdo.ba.challenge.msfeedback.model.request.FeedbackRequest;
 import com.thiagomdo.ba.challenge.msfeedback.services.FeedbackService;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/feedbacks")
-public class FeedBackResource implements FeedbackSwaggerController {
+public class FeedBackResourceImpl implements FeedbackResource {
 
     @Autowired
     FeedbackService feedBackService;

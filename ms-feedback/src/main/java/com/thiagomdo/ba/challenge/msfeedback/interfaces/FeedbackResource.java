@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public interface FeedbackSwaggerController {
+public interface FeedbackResource {
     @Operation(
         operationId = "getAllFeedBack",
         summary = "Returns all feedbacks.",

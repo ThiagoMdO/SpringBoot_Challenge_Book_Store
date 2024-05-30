@@ -2,7 +2,7 @@ package com.thiagomdo.ba.challenge.msorders.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thiagomdo.ba.challenge.msorders.model.request.OrderRequestCancel;
-import com.thiagomdo.ba.challenge.msorders.resources.OrderResource;
+import com.thiagomdo.ba.challenge.msorders.resources.OrderResourceImpl;
 import com.thiagomdo.ba.challenge.msorders.service.OrderService;
 import com.thiagomdo.ba.challenge.msorders.service.exception.*;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +21,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest(OrderResource.class)
-class OrderResourceTests {
+@WebMvcTest(OrderResourceImpl.class)
+class OrderResourceImplTests {
 
     @Autowired
     MockMvc mockMvc;

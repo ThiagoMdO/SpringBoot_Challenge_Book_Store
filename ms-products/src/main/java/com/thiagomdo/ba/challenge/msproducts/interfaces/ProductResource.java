@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-public interface ProductSwaggerController {
+public interface ProductResource {
     @Operation(
         operationId = "findAllProducts",
         summary = "Returns all of products.",
@@ -23,7 +23,7 @@ public interface ProductSwaggerController {
             @ApiResponse(responseCode = "200", description = "OK", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.ProductDTO.class)))
             }),
-            @ApiResponse(responseCode = "x-200 ", description = "OK", content = {
+            @ApiResponse(responseCode = "x-200", description = "OK", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.EmptyListException.class)))
             }),
             @ApiResponse(responseCode = "500", description = "SERVICE_UNAVAILABLE", content = {
@@ -75,7 +75,7 @@ public interface ProductSwaggerController {
             @ApiResponse(responseCode = "400", description = "MinDescriptionException", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.MinDescriptionException.class)))
             }),
-            @ApiResponse(responseCode = "x-400", description = "MinValueException", content = {
+            @ApiResponse(responseCode = "400", description = "MinValueException", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = com.devertelo.springswaggercodegen3.model.MinValueException.class)))
             }),
             @ApiResponse(responseCode = "409", description = "Conflict", content = {

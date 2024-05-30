@@ -21,7 +21,7 @@ public class ProductService {
     public List<ProductDTO> findAll() {
         List<Product> list = productRepository.findAll();
         if (list.isEmpty()) throw new EmptyListException();
-        return list.stream().map(x -> new ProductDTO(x)).collect(Collectors.toList());
+        return list.stream().map(ProductDTO::new).toList();
     }
 
     public ProductDTO findById(String id) {

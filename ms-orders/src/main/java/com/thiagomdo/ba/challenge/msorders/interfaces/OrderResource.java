@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-public interface OrderSwaggerController {
+public interface OrderResource {
     @Operation(
         operationId = "getAllOrders",
         summary = "Return all orders.",

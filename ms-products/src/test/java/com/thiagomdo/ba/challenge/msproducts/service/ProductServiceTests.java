@@ -158,7 +158,7 @@ class ProductServiceTests {
         assertThat(result.getDescription().length()).isGreaterThan(10);
         assertThat(result.getValue()).isNotNegative();
         assertThat(result).isEqualTo(ALERTA_VERMELHO_BOOK_DTO);
-        verify(productRepository).save(any(Product.class));
+        verify(productRepository, times(1)).save(ALERTA_VERMELHO_BOOK);
     }
 
     @Test
